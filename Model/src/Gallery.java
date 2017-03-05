@@ -8,14 +8,10 @@ public class Gallery {
 			//Genre > tags > Photo
 	private static HashMap<String, Profile> allUsers;
 			//userName > profile
-	//private static HashMap<Profile, Integer> banUsers;
-			//Profile > time
-			//will do i thing we need treads
-	
+
 	private Gallery(){
 		this.gallery = new HashMap<>();
 		this.allUsers = new HashMap<>();
-		//this.banUsers = new HashMap<>();
 	}
 	
 	public static Gallery getInstance(){
@@ -39,25 +35,6 @@ public class Gallery {
 			}
 		}
 	}
-	
-	/*public static void banUser(Profile p, int time){
-	*	//time will be in days
-	*	if(!banUsers.containsKey(p)){
-	*		banUsers.put(p, time*24*360);
-	*	}else{
-	*		time += banUsers.get(p).intValue();
-	*		banUsers.put(p, time*24*360);
-	*	}
-	*	p.setIsBan(true);
-	*}
-	*
-	*public static void removeFromBanList(Profile p){
-	*	if(banUsers.containsKey(p)){
-	*		banUsers.remove(p);
-	*		p.setIsBan(false);
-	*	}
-	*}
-	*/
 	
 	public static void addPhoto(Photo p){
 		if(!gallery.containsKey(p.getGenre())){
