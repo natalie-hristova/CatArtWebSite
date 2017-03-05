@@ -26,31 +26,55 @@ public abstract class Profile implements Comparable<Profile> {
 	private boolean isLogged;
 	private Rights rights;
 	private HashSet<Photo> favourites;
-
-	// TODO mislq da dobavim nezadyljitelnite poleta s builder patern
-
 	private HashMap<String, Profile> friends;
 	private ArrayList<Comment> comments;
 	private HashMap<Photo.Genre, HashMap<String, Photo>> myGallery;
 	private HashSet<Profile> blockedUsers;
-
-	Profile(String userName, String password, String email, Rights rights, int year, int month, int day,
-			String signature, Gender gender) {
+	
+	
+	Profile(String userName, String password,String email,Gender gender){
 		this.rights = Rights.MEMBER;
+		this.gender= gender;
+		this.email= email;
+		this.isLogged= true;
 		this.joiningDate = LocalDateTime.now();
 		this.userName = userName;
 		this.password = password;
-	//	this.changeEmail("", email);
-		this.changeDateOfBirth(year, month, day);
-		this.changeSignature(signature);
-
 		this.friends = new HashMap<>();
 		this.comments = new ArrayList<>();
 		this.myGallery = new HashMap<>();
 		this.blockedUsers = new HashSet<>();
 	}
 
-	//TODO  tu kne trqbva  l ida proverqvame v db dali ima takav protebitel s takava parola .. 
+//	Profile(String userName, String password, String email, Rights rights, int year, int month, int day,
+//			String signature, Gender gender) {
+//		this.rights = Rights.MEMBER;
+//		this.joiningDate = LocalDateTime.now();
+//		this.userName = userName;
+//		this.password = password;
+//		this.changeDateOfBirth(year, month, day);
+//		this.changeSignature(signature);
+//
+//		this.friends = new HashMap<>();
+//		this.comments = new ArrayList<>();
+//		this.myGallery = new HashMap<>();
+//		this.blockedUsers = new HashSet<>();
+//	}
+	
+	public Profile name(String name){
+		this.name= name;
+		return this;
+	}
+	
+	public Profile signature(String s){
+		this.signature= s;
+		return this;
+	}
+
+	public Profile dateOfBirth(Calendar dateOfBirth){
+		this.dateOfBirth=dateOfBirth;
+		return this;
+	}
 	public void logIn(String userName, String password) {
 		if (userName.equals(this.userName) && password.equals(this.password)) {
 			isLogged = true;
@@ -59,45 +83,42 @@ public abstract class Profile implements Comparable<Profile> {
 		}
 	}
 
-	
-//TODO tuk nqma nujd ot parametri spored men 
 	public void LogOut() {
-this.isLogged= false ;
+		this.isLogged = false;
 	}
 
 	public void AddFriend(Profile p) {
-		if (isLogged&& !friends.containsValue(p)) {
+		if (isLogged && !friends.containsValue(p)) {
 			friends.put(p.getUserName(), p);
 		}
 
 	}
 
 	public void RemoveFriend(Profile p) {
-		if (isLogged&& friends.containsValue(p)) {
+		if (isLogged && friends.containsValue(p)) {
 			friends.remove(p.getUserName(), p);
 		}
 	}
 
 	public void blockProfile(Profile p) {
 		if (isLogged && !blockedUsers.contains(p)) {
-		blockedUsers.add(p);
+			blockedUsers.add(p);
 		}
 
 	}
 
 	public void changePassword(String oldPassword, String newPassword) {
 		if (oldPassword.equals(this.password)) {
-			this.password= newPassword;
-		}else{
+			this.password = newPassword;
+		} else {
 			System.out.println("Password not changed");
 		}
 
 	}
 
-
 	public void changeName(String name) {
-		if (name != null && name.length()>0) {
-			this.name = name ;
+		if (name != null && name.length() > 0) {
+			this.name = name;
 		}
 
 	}
@@ -106,36 +127,41 @@ this.isLogged= false ;
 		this.dateOfBirth.set(year, month, day);
 	}
 
-
 	public void changeSignature(String s) {
-//TODO  interests
+		this.signature= s;
 	}
 
 	public void changeAvatar(File f) {
 
 	}
 
-	public void changeRights(Rights r,Profile user) {
-// da imam pravada smenqm pravata na dr ako sam admin
+	public void changeRights(Rights r, Profile user) {
+		if (this.rights.equals(Rights.ADMIN)) {
+			user.setRights(r);
+		}
+	}
+
+	protected void setRights(Rights r) {
+		this.rights = r;
+
 	}
 
 	public void addPhoto(Photo p) {
-	
 
 	}
 
 	public void removePhoto(Photo p) {
-
+		this.myGallery.remove(p);
 	}
 
-	public void comment(Comment c,Photo p) {
-// TODO  
+	public void comment(Comment c, Photo p) {
+		p.addComment(c);
 	}
 
-	public void editComment(Comment c,Photo photo) {
-if (c!= null) {
-	photo.addComment(c);
-}
+	public void editComment(Comment c, Photo photo) {
+		if (c != null) {
+			photo.addComment(c);
+		}
 	}
 
 	public void deleteComment(Comment c) {
@@ -145,15 +171,11 @@ if (c!= null) {
 
 	}
 
-	public void ratePhoto(Photo p,int rate) {
-		if (rate>0 && rate <6) {
-			p.addRaiting(rate);
+	public void ratePhoto(Photo p, int rate) {
+		if (rate > 0 && rate < 6) {
+			p.changeRaiting(rate,this);
 		}
-
 	}
-
-
-
 
 	public void addToFavorite(Photo p) {
 
@@ -177,32 +199,30 @@ if (c!= null) {
 		this.userName = userName;
 	}
 
-
-
 	public Rights getRights() {
 		return rights;
 	}
 
 	static class Admin extends Profile {
 		Admin(Profile p) {
-			super(p.userName, p.password, p.email, Rights.ADMIN, p.dateOfBirth.YEAR, p.dateOfBirth.MONTH,
-					p.dateOfBirth.DAY_OF_MONTH, p.signature, p.gender);
+			super(p.userName, p.password, p.email, p.gender);
+			this.setRights( Rights.ADMIN);
 		}
 	}
 
 	static class Moderator extends Profile {
 
 		Moderator(Profile p) {
-			super(p.userName, p.password, p.email, Rights.MODERATOR, p.dateOfBirth.YEAR, p.dateOfBirth.MONTH,
-					p.dateOfBirth.DAY_OF_MONTH, p.signature, p.gender);
+			super(p.userName, p.password, p.email, p.gender);
+			this.setRights( Rights.MODERATOR);
 		}
 	}
 
 	static class Member extends Profile {
 
 		Member(Profile p) {
-			super(p.userName, p.password, p.email, Rights.MEMBER, p.dateOfBirth.YEAR, p.dateOfBirth.MONTH,
-					p.dateOfBirth.DAY_OF_MONTH, p.signature, p.gender);
+			super(p.userName, p.password, p.email, p.gender);
+			this.setRights(Rights.MEMBER);
 		}
 	}
 
