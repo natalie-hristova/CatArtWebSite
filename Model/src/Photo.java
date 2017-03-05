@@ -62,13 +62,15 @@ public class Photo implements Comparable<Photo> {
 			this.name = name;
 		}
 	}
-	public void changeRaiting(int rating, Profile profil) {
+	public void changeRaiting(int rate, Profile profil) {
 		if (this.pplThatHaveRated.contains(profil)) {
 			return;
 		}
-		this.pplThatHaveRated.add(profil);
-		// TODO DA GO OPRAVIM
-		this.rating = (rating + this.rating) / this.pplThatHaveRated.size();
+			rating*= ratedPeople + rate;
+			ratedPeople ++;
+			this.pplThatHaveRated.add(profil);
+			rating/=ratedPeople; 
+		
 	}
 
 	public void changeGenre(Genre genre) throws InvalidInfoException {
@@ -191,10 +193,5 @@ public class Photo implements Comparable<Photo> {
 		
 	}
 
-	public void addRaiting(int rate) {
 	
-		rate*= ratedPeople + rate;
-		ratedPeople ++;
-		rate/=ratedPeople; 
-	}
 }
