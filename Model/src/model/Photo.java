@@ -67,11 +67,6 @@ public class Photo implements Comparable<Photo> {
 		}
 		this.pplThatHaveRated.add(profil);
 		this.rating = rating + this.rating*(pplThatHaveRated.size()-1) / this.pplThatHaveRated.size();
-			rating*= ratedPeople + rate;
-			ratedPeople ++;
-			this.pplThatHaveRated.add(profil);
-			rating/=ratedPeople; 
-			//Photo.java
 	}
 	public void changeGenre(Genre genre) throws InvalidInfoException {
 		if (genre == null && this.genre == null) {
