@@ -1,3 +1,4 @@
+package model;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -5,7 +6,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public abstract class Profile implements Comparable<Profile> {
+public class Profile implements Comparable<Profile> {
 	public enum Rights {
 		ADMIN, MEMBER, MODERATOR;
 	}
@@ -147,11 +148,13 @@ public abstract class Profile implements Comparable<Profile> {
 	}
 
 	public void addPhoto(Photo p) {
+		Gallery.addPhoto(p);
 
 	}
 
 	public void removePhoto(Photo p) {
 		this.myGallery.remove(p);
+		Gallery.deletePhoto(p);
 	}
 
 	public void comment(Comment c, Photo p) {
@@ -202,28 +205,4 @@ public abstract class Profile implements Comparable<Profile> {
 	public Rights getRights() {
 		return rights;
 	}
-
-	static class Admin extends Profile {
-		Admin(Profile p) {
-			super(p.userName, p.password, p.email, p.gender);
-			this.setRights( Rights.ADMIN);
-		}
-	}
-
-	static class Moderator extends Profile {
-
-		Moderator(Profile p) {
-			super(p.userName, p.password, p.email, p.gender);
-			this.setRights( Rights.MODERATOR);
-		}
-	}
-
-	static class Member extends Profile {
-
-		Member(Profile p) {
-			super(p.userName, p.password, p.email, p.gender);
-			this.setRights(Rights.MEMBER);
-		}
-	}
-
 }
