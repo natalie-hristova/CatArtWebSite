@@ -13,10 +13,10 @@ public class Photo implements Comparable<Photo> {
 	}
 
 	private String name;
-	private Profile profile;
+	private User profile;
 	private double  rating;
-	private ArrayList<Profile> pplThatHaveRated = new ArrayList<>();
-	private LocalDateTime dateofuploading;//dateOfUploading
+	private ArrayList<User> pplThatHaveRated = new ArrayList<>();
+	private LocalDateTime dateOfUploading;
 	private Genre genre;
 	private String about;
 	private ArrayList<String> tags = new ArrayList<>();
@@ -24,9 +24,9 @@ public class Photo implements Comparable<Photo> {
 	private File photo;
 	private int ratedPeople=0;
 	
-	Photo(String name, Profile profile, Genre genre, String about, String tag) throws InvalidInfoException {
+	Photo(String name, User profile, Genre genre, String about, String tag) throws InvalidInfoException {
 		this.rating = 0;
-		this.dateofuploading = LocalDateTime.now();
+		this.dateOfUploading = LocalDateTime.now();
 		this.profile = profile;
 		this.changeInfo(about);
 		this.changeName(name);
@@ -61,7 +61,7 @@ public class Photo implements Comparable<Photo> {
 			this.name = name;
 		}
 	}
-	public void changeRaiting(int rate, Profile profil) {
+	public void changeRaiting(int rate, User profil) {
 		if (this.pplThatHaveRated.contains(profil)) {
 			return;
 		}
@@ -92,11 +92,11 @@ public class Photo implements Comparable<Photo> {
 		return Collections.unmodifiableList(this.tags);
 	}
 
-	public Profile getProfile() {
+	public User getProfile() {
 		return this.profile;
 	}
-	public LocalDateTime getDateofuploading() {
-		return dateofuploading;
+	public LocalDateTime getDateOfUploading() {
+		return dateOfUploading;
 	}
 	public int getComments(){
 		return this.comments.size();
@@ -118,7 +118,7 @@ public class Photo implements Comparable<Photo> {
 					if (a == 0) {
 						a = this.name.compareTo(p.name);
 						if (a == 0) {
-							return this.dateofuploading.compareTo(p.dateofuploading);
+							return this.dateOfUploading.compareTo(p.dateOfUploading);
 						}
 					}
 					else{

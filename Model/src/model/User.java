@@ -1,12 +1,16 @@
 package model;
+
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
-public class Profile implements Comparable<Profile> {
+import javax.xml.bind.ValidationException;
+
+public class User implements Comparable<User> {
 	public enum Rights {
 		ADMIN, MEMBER, MODERATOR;
 	}
@@ -27,60 +31,77 @@ public class Profile implements Comparable<Profile> {
 	private boolean isLogged;
 	private Rights rights;
 	private HashSet<Photo> favourites;
-	private HashMap<String, Profile> friends;
+	private HashMap<String, User> friends;
 	private ArrayList<Comment> comments;
 	private HashMap<Photo.Genre, HashMap<String, Photo>> myGallery;
-	private HashSet<Profile> blockedUsers;
-	
-	
-	Profile(String userName, String password,String email,Gender gender){
+	private HashSet<User> blockedUsers;
+
+	User(String userName, String password, String email, Gender gender) throws ValidationException {
 		this.rights = Rights.MEMBER;
-		this.gender= gender;
-		this.email= email;
-		this.isLogged= true;
+		this.gender = gender;
+		if (isValidEmail(email)) {
+			this.email = email;
+		}
+		this.isLogged = true;
 		this.joiningDate = LocalDateTime.now();
-		this.userName = userName;
+		if (isValidUserName(userName)) {
+			this.userName = userName;
+		}
+	if (isValidPassword(password)) {
 		this.password = password;
+	}
 		this.friends = new HashMap<>();
 		this.comments = new ArrayList<>();
 		this.myGallery = new HashMap<>();
 		this.blockedUsers = new HashSet<>();
 	}
 
-//	Profile(String userName, String password, String email, Rights rights, int year, int month, int day,
-//			String signature, Gender gender) {
-//		this.rights = Rights.MEMBER;
-//		this.joiningDate = LocalDateTime.now();
-//		this.userName = userName;
-//		this.password = password;
-//		this.changeDateOfBirth(year, month, day);
-//		this.changeSignature(signature);
-//
-//		this.friends = new HashMap<>();
-//		this.comments = new ArrayList<>();
-//		this.myGallery = new HashMap<>();
-//		this.blockedUsers = new HashSet<>();
-//	}
-	
-	public Profile name(String name){
-		this.name= name;
+	private boolean isValidPassword(String password) throws ValidationException {
+		if (password!= null && password.length()>3) {
+			return true;
+		}	else{
+			throw new ValidationException("Not valid password");
+		}
+	}
+
+	public User name(String name) {
+		this.name = name;
 		return this;
 	}
 	
-	public Profile signature(String s){
-		this.signature= s;
+	private boolean isValidUserName(String userName)throws ValidationException{
+		if (userName !=null && userName.length()>4) {
+			return true;
+		}
+		else{
+			throw new ValidationException("Not valid username");
+		}
+	}
+	
+	private boolean isValidEmail(String email)throws ValidationException{
+		if (email!= null && email.matches("[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}")) {
+			return true;
+		}
+		else{
+			throw new ValidationException("Not valid email");
+		}
+	}
+
+	public User signature(String s) {
+		this.signature = s;
 		return this;
 	}
 
-	public Profile dateOfBirth(Calendar dateOfBirth){
-		this.dateOfBirth=dateOfBirth;
+	public User dateOfBirth(Calendar dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 		return this;
 	}
+
 	public void logIn(String userName, String password) {
 		if (userName.equals(this.userName) && password.equals(this.password)) {
 			isLogged = true;
 		} else {
-			System.out.println("Invalid user name or password");
+			System.out.println("Invalid username or password");
 		}
 	}
 
@@ -88,20 +109,21 @@ public class Profile implements Comparable<Profile> {
 		this.isLogged = false;
 	}
 
-	public void AddFriend(Profile p) {
-		if (isLogged && !friends.containsValue(p)) {
+	public void AddFriend(User p) {
+		if (isLogged && !friends.containsValue(p) && p!= null) {
 			friends.put(p.getUserName(), p);
+			p.AddFriend(this);
 		}
 
 	}
 
-	public void RemoveFriend(Profile p) {
+	public void RemoveFriend(User p) {
 		if (isLogged && friends.containsValue(p)) {
 			friends.remove(p.getUserName(), p);
 		}
 	}
 
-	public void blockProfile(Profile p) {
+	public void blockProfile(User p) {
 		if (isLogged && !blockedUsers.contains(p)) {
 			blockedUsers.add(p);
 		}
@@ -129,14 +151,16 @@ public class Profile implements Comparable<Profile> {
 	}
 
 	public void changeSignature(String s) {
-		this.signature= s;
+		this.signature = s;
 	}
 
 	public void changeAvatar(File f) {
-
+		if (isLogged && f != null) {
+			this.avatar = f;
+		}
 	}
 
-	public void changeRights(Rights r, Profile user) {
+	public void changeRights(Rights r, User user) {
 		if (this.rights.equals(Rights.ADMIN)) {
 			user.setRights(r);
 		}
@@ -176,7 +200,7 @@ public class Profile implements Comparable<Profile> {
 
 	public void ratePhoto(Photo p, int rate) {
 		if (rate > 0 && rate < 6) {
-			p.changeRaiting(rate,this);
+			p.changeRaiting(rate, this);
 		}
 	}
 
@@ -186,7 +210,7 @@ public class Profile implements Comparable<Profile> {
 	}
 
 	@Override
-	public int compareTo(Profile o) {
+	public int compareTo(User o) {
 		int a = this.userName.compareTo(o.userName);
 		if (a == 0) {
 			return this.email.compareTo(o.email);
@@ -204,5 +228,9 @@ public class Profile implements Comparable<Profile> {
 
 	public Rights getRights() {
 		return rights;
+	}
+	@Override
+	public String toString() {
+		return this.userName + " - " + this.email;
 	}
 }
