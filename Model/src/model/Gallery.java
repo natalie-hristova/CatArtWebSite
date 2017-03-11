@@ -1,5 +1,8 @@
 package model;
 
+import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,20 +12,29 @@ import java.util.TreeSet;
 import javax.xml.bind.ValidationException;
 
 public class Gallery {
+	
+	private String name;
 	private static Gallery instance;
 	private static HashMap<Photo.Genre, HashMap<String, TreeSet<Photo>>> gallery;
 	// Genre > tags > Photo
 	private static HashMap<String, User> allUsers;
 	// userName > profile
 
-	private Gallery() {
+	private Gallery(String name ) {
+		if (nameIsValid(name)){
+			this.name = name;
+		}
 		this.gallery = new HashMap<>();
 		this.allUsers = new HashMap<>();
 	}
 
-	public synchronized static Gallery getInstance() {
+	private boolean nameIsValid(String name) {
+		return (name != null && name.length()>2);
+	}
+
+	public synchronized static Gallery getInstance(String name) {
 		if (instance == null) {
-			instance = new Gallery();
+			instance = new Gallery(name);
 		}
 		return instance;
 	}
@@ -171,5 +183,6 @@ public class Gallery {
 			return a;
 		}
 	};
+
 
 }

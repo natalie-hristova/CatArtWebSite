@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import javax.xml.bind.ValidationException;
@@ -33,7 +34,7 @@ public class User implements Comparable<User> {
 	private HashSet<Photo> favourites;
 	private HashMap<String, User> friends;
 	private ArrayList<Comment> comments;
-	private HashMap<Photo.Genre, HashMap<String, Photo>> myGallery;
+	private HashMap<Photo.Genre, HashMap<String, TreeSet<Photo>>> myGallery;
 	private HashSet<User> blockedUsers;
 
 	User(String userName, String password, String email, Gender gender) throws ValidationException {
@@ -47,9 +48,9 @@ public class User implements Comparable<User> {
 		if (isValidUserName(userName)) {
 			this.userName = userName;
 		}
-	if (isValidPassword(password)) {
-		this.password = password;
-	}
+		if (isValidPassword(password)) {
+			this.password = password;
+		}
 		this.friends = new HashMap<>();
 		this.comments = new ArrayList<>();
 		this.myGallery = new HashMap<>();
@@ -57,9 +58,9 @@ public class User implements Comparable<User> {
 	}
 
 	private boolean isValidPassword(String password) throws ValidationException {
-		if (password!= null && password.length()>3) {
+		if (password != null && password.length() > 3) {
 			return true;
-		}	else{
+		} else {
 			throw new ValidationException("Not valid password");
 		}
 	}
@@ -68,21 +69,19 @@ public class User implements Comparable<User> {
 		this.name = name;
 		return this;
 	}
-	
-	private boolean isValidUserName(String userName)throws ValidationException{
-		if (userName !=null && userName.length()>4) {
+
+	private boolean isValidUserName(String userName) throws ValidationException {
+		if (userName != null && userName.length() > 4) {
 			return true;
-		}
-		else{
+		} else {
 			throw new ValidationException("Not valid username");
 		}
 	}
-	
-	private boolean isValidEmail(String email)throws ValidationException{
-		if (email!= null && email.matches("[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}")) {
+
+	private boolean isValidEmail(String email) throws ValidationException {
+		if (email != null && email.matches("[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}")) {
 			return true;
-		}
-		else{
+		} else {
 			throw new ValidationException("Not valid email");
 		}
 	}
@@ -98,7 +97,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void logIn(String userName, String password) {
-		if (userName.equals(this.userName) && password.equals(this.password)) {
+		if (Gallery.getProfileByUserName(userName)!=null && password.equals(this.password)) {
 			isLogged = true;
 		} else {
 			System.out.println("Invalid username or password");
@@ -110,22 +109,30 @@ public class User implements Comparable<User> {
 	}
 
 	public void AddFriend(User p) {
-		if (isLogged && !friends.containsValue(p) && p!= null) {
-			friends.put(p.getUserName(), p);
-			p.AddFriend(this);
-		}
 
+		if (isLogged &&!blockedUsers.contains(p)) {
+			if ( !friends.containsValue(p) && p != null) {
+				friends.put(p.getUserName(), p);
+				p.AddFriend(this);
+			}
+		}
 	}
+
+	
 
 	public void RemoveFriend(User p) {
 		if (isLogged && friends.containsValue(p)) {
 			friends.remove(p.getUserName(), p);
+			p.RemoveFriend(this);
 		}
 	}
 
 	public void blockProfile(User p) {
 		if (isLogged && !blockedUsers.contains(p)) {
 			blockedUsers.add(p);
+			if (friends.containsKey(p)) {
+				friends.remove(p);
+			}
 		}
 
 	}
@@ -162,13 +169,8 @@ public class User implements Comparable<User> {
 
 	public void changeRights(Rights r, User user) {
 		if (this.rights.equals(Rights.ADMIN)) {
-			user.setRights(r);
+			user.rights = r;
 		}
-	}
-
-	protected void setRights(Rights r) {
-		this.rights = r;
-
 	}
 
 	public void addPhoto(Photo p) {
@@ -229,6 +231,7 @@ public class User implements Comparable<User> {
 	public Rights getRights() {
 		return rights;
 	}
+
 	@Override
 	public String toString() {
 		return this.userName + " - " + this.email;

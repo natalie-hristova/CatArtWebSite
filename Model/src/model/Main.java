@@ -13,7 +13,7 @@ import model.User.Gender;
 public class Main {
 	public static void main(String[] args) throws InvalidInfoException {
 
-		Gallery.getInstance();
+		Gallery.getInstance("Catsss...<3");
 		// registration
 		User gesho;
 		User pesho;

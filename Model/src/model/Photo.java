@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class Photo implements Comparable<Photo> {
 	public enum Genre {
@@ -22,7 +21,6 @@ public class Photo implements Comparable<Photo> {
 	private ArrayList<String> tags = new ArrayList<>();
 	private ArrayList<Comment> comments = new ArrayList<>();
 	private File photo;
-	private int ratedPeople=0;
 	
 	Photo(String name, User profile, Genre genre, String about, String tag) throws InvalidInfoException {
 		this.rating = 0;
