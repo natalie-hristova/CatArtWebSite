@@ -1,9 +1,14 @@
 package model;
 
 import java.io.File;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeSet;
@@ -37,14 +42,14 @@ public class User implements Comparable<User> {
 	private HashMap<Photo.Genre, HashMap<String, TreeSet<Photo>>> myGallery;
 	private HashSet<User> blockedUsers;
 
-	User(String userName, String password, String email, Gender gender) throws ValidationException {
+	public User(String userName, String password, String email, Gender gender) throws ValidationException {
 		this.rights = Rights.MEMBER;
 		this.gender = gender;
 		if (isValidEmail(email)) {
 			this.email = email;
 		}
-		this.isLogged = true;
 		this.joiningDate = LocalDateTime.now();
+		this.isLogged = true;
 		if (isValidUserName(userName)) {
 			this.userName = userName;
 		}
@@ -97,7 +102,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void logIn(String userName, String password) {
-		if (Gallery.getProfileByUserName(userName)!=null && password.equals(this.password)) {
+		if (Gallery.getProfileByUserName(userName) != null && password.equals(this.password)) {
 			isLogged = true;
 		} else {
 			System.out.println("Invalid username or password");
@@ -110,15 +115,13 @@ public class User implements Comparable<User> {
 
 	public void AddFriend(User p) {
 
-		if (isLogged &&!blockedUsers.contains(p)) {
-			if ( !friends.containsValue(p) && p != null) {
+		if (isLogged && !blockedUsers.contains(p)) {
+			if (!friends.containsValue(p) && p != null) {
 				friends.put(p.getUserName(), p);
 				p.AddFriend(this);
 			}
 		}
 	}
-
-	
 
 	public void RemoveFriend(User p) {
 		if (isLogged && friends.containsValue(p)) {
@@ -235,5 +238,13 @@ public class User implements Comparable<User> {
 	@Override
 	public String toString() {
 		return this.userName + " - " + this.email;
+	}
+
+	public Date getJoiningDate() {
+		LocalDateTime now = LocalDateTime.now();
+	    Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+	    Date dateFromOld = Date.from(instant);
+		Month m = joiningDate.getMonth();
+		return dateFromOld;
 	}
 }
