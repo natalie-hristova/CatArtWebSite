@@ -1,4 +1,4 @@
-package catArt;
+package servlets;
 
 import java.io.IOException;
 

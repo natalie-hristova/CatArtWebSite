@@ -1,21 +1,23 @@
 package model;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.xml.bind.ValidationException;
+
+import model.Photo.Genre;
 
 public class Gallery {
 	
 	private String name;
 	private static Gallery instance;
-	private static HashMap<Photo.Genre, HashMap<String, TreeSet<Photo>>> gallery;
+	private static HashMap<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> gallery;
 	// Genre > tags > Photo
 	private static HashMap<String, User> allUsers;
 	// userName > profile
@@ -72,7 +74,7 @@ public class Gallery {
 		}
 		for (String s : p.getTags()) {
 			if (!gallery.get(p.getGenre()).containsKey(s)) {
-				gallery.get(p.getGenre()).put(s, new TreeSet<>());
+				gallery.get(p.getGenre()).put(s, new ConcurrentSkipListSet<>());
 			}
 			gallery.get(p.getGenre()).get(s).add(p);
 			;
@@ -101,9 +103,9 @@ public class Gallery {
 	}
 
 	public static void showPhoto() {
-		for (Entry<Photo.Genre, HashMap<String, TreeSet<Photo>>> e : gallery.entrySet()) {
+		for (Entry<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : gallery.entrySet()) {
 			System.out.println(e.getKey() + ":");
-			for (Entry<String, TreeSet<Photo>> e1 : e.getValue().entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e1 : e.getValue().entrySet()) {
 				System.out.println("  -" + e1.getKey() + ":");
 				for (Photo e2 : e1.getValue()) {
 					System.out.println("     *" + e2.getName());
@@ -113,9 +115,9 @@ public class Gallery {
 		}
 	}
 
-	public static HashMap<Photo.Genre, HashMap<String, TreeSet<Photo>>> getGallery() {
-		return gallery;
-	}
+	public static  Map<Photo.Genre, HashMap <String, ConcurrentSkipListSet<Photo>>> getGallery() {
+		return Collections.unmodifiableMap(Gallery.gallery);
+	}	
 
 	public static Comparator<Photo> alphabeticProfileComparator = new Comparator<Photo>() {
 		@Override

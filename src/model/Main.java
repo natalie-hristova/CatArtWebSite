@@ -1,17 +1,17 @@
 package model;
-import java.util.Comparator;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.xml.bind.ValidationException;
 
 import model.Photo.Genre;
-import model.Photo.InvalidInfoException;
 import model.User.Gender;
 
 public class Main {
-	public static void main(String[] args) throws InvalidInfoException {
+	public static void main(String[] args) throws ValidationException {
 
 		Gallery.getInstance("Catsss...<3");
 		// registration
@@ -61,8 +61,8 @@ public class Main {
 		Gallery.showPhoto();
 
 		TreeSet<Photo> alphabetic = new TreeSet<Photo>(Gallery.alphabeticProfileComparator);
-		for (Entry<Photo.Genre, HashMap<String, TreeSet<Photo>>> e : Gallery.getGallery().entrySet()) {
-			for (Entry<String, TreeSet<Photo>> e1 : e.getValue().entrySet()) {
+		for (Entry<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : Gallery.getGallery().entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e1 : e.getValue().entrySet()) {
 				alphabetic.addAll(e1.getValue());
 			}
 		}
@@ -70,8 +70,8 @@ public class Main {
 		System.out.println(alphabetic.toString());
 		System.out.println();
 		TreeSet<Photo> mostComments = new TreeSet<Photo>(Gallery.mostCommentsComparator);
-		for (Entry<Photo.Genre, HashMap<String, TreeSet<Photo>>> e : Gallery.getGallery().entrySet()) {
-			for (Entry<String, TreeSet<Photo>> e1 : e.getValue().entrySet()) {
+		for (Entry<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : Gallery.getGallery().entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e1 : e.getValue().entrySet()) {
 				mostComments.addAll(e1.getValue());
 			}
 		}
@@ -79,8 +79,8 @@ public class Main {
 		System.out.println(mostComments.toString());
 		System.out.println();
 		TreeSet<Photo> mostRating = new TreeSet<Photo>(Gallery.mostRatingStarsComparator);
-		for (Entry<Photo.Genre, HashMap<String, TreeSet<Photo>>> e : Gallery.getGallery().entrySet()) {
-			for (Entry<String, TreeSet<Photo>> e1 : e.getValue().entrySet()) {
+		for (Entry<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : Gallery.getGallery().entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e1 : e.getValue().entrySet()) {
 				mostRating.addAll(e1.getValue());
 			}
 		}
@@ -89,8 +89,8 @@ public class Main {
 		System.out.println();
 
 		TreeSet<Photo> noComments = new TreeSet<Photo>(Gallery.noCommentsComparator);
-		for (Entry<Photo.Genre, HashMap<String, TreeSet<Photo>>> e : Gallery.getGallery().entrySet()) {
-			for (Entry<String, TreeSet<Photo>> e1 : e.getValue().entrySet()) {
+		for (Entry<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : Gallery.getGallery().entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e1 : e.getValue().entrySet()) {
 				noComments.addAll(e1.getValue());
 			}
 		}
@@ -98,8 +98,8 @@ public class Main {
 		System.out.println(noComments.toString());
 		System.out.println();
 		TreeSet<Photo> time = new TreeSet<Photo>(Gallery.timeOfUploadComparator);
-		for (Entry<Photo.Genre, HashMap<String, TreeSet<Photo>>> e : Gallery.getGallery().entrySet()) {
-			for (Entry<String, TreeSet<Photo>> e1 : e.getValue().entrySet()) {
+		for (Entry<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : Gallery.getGallery().entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e1 : e.getValue().entrySet()) {
 				time.addAll(e1.getValue());
 			}
 		}

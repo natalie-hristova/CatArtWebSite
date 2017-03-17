@@ -1,0 +1,57 @@
+.floatLeft{
+	display: inline-block;
+	float: left;
+	list-style-type: none;
+}
+.stopFloat{
+	clear: both;
+	list-style-type: none;
+}
+ul li dir a img{
+	max-width:175px;
+	max-height:175px;
+  	object-fit: cover;
+  	overflow:hidden;	
+}
+ul li ul li a img{
+	max-width:75px;
+	max-height:75px;
+ 	object-fit: cover;
+  	overflow:hidden;	
+}	
+ul{
+	list-style-type: none;
+}
+ul li a img{
+	max-width:255px;
+	max-height:255px;
+	margin:0 0 0 25px;
+	object-fit: cover;
+  	overflow:hidden;
+}
+dir{
+	margin: 0;
+	padding: 0;
+}
+ul{
+	margin: 0;
+	padding: 0;
+}
+li{
+	margin: 0;
+	padding: 0;
+}
+ul li ul dir a img{
+	max-width:75px;
+	max-height:75px;
+ 	padding: 20px 0 0 0;
+ 	margin:0 0 0 25px;
+  	object-fit: cover;
+  	overflow:hidden;
+}
+.moveToTheLeft{
+	margin: 0 0 0 100px;
+}
+.moveDown{
+	margin: 10.5px 0 0 0;
+}
