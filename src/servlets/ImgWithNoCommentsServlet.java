@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -12,19 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import DAO.GalleryDAO;
 
-@WebServlet("/ShowImg")
-public class ShowImgServlet extends HttpServlet {
+@WebServlet("/ImgWithNoCommentsServlet")
+public class ImgWithNoCommentsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HashMap<Integer, String> list = new HashMap<>();
-		try {
-			GalleryDAO.getAllImgesAtRandom(list);
-		} catch (SQLException e) {
-			System.out.println("error in AllImagesAtRandom");
+		GalleryDAO.getImgWithNoComments(list);
+		for(String s : list.values()){
+			resp.getWriter().write("<img src=\""+ s +"\">");
 		}
-	    req.setAttribute("list", list);
-	    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
+		//    req.setAttribute("list", list);
+		//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
 	}
 }
+
