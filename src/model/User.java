@@ -2,19 +2,23 @@ package model;
 
 import java.io.File;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.xml.bind.ValidationException;
+
+import model.Photo.Genre;
 
 public class User implements Comparable<User> {
 	public enum Rights {
@@ -36,10 +40,11 @@ public class User implements Comparable<User> {
 	private File avatar;
 	private boolean isLogged;
 	private Rights rights;
+	private String country;
 	private HashSet<Photo> favourites;
 	private HashMap<String, User> friends;
 	private ArrayList<Comment> comments;
-	private HashMap<Photo.Genre, HashMap<String, TreeSet<Photo>>> myGallery;
+	private HashMap<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> myGallery;
 	private HashSet<User> blockedUsers;
 
 	public User(String userName, String password, String email, Gender gender) throws ValidationException {
@@ -177,12 +182,31 @@ public class User implements Comparable<User> {
 	}
 
 	public void addPhoto(Photo p) {
+		//dobavqne i v kolekciqta na user-a
+		if(!this.myGallery.containsKey(p.getGenre())){
+			this.myGallery.put(p.getGenre(), new HashMap<>());
+		}
+		for(String s : p.getTags()){
+			if(!this.myGallery.get(p.getGenre()).containsKey(s)){
+				this.myGallery.get(p.getGenre()).put(s, new ConcurrentSkipListSet<>());
+			}
+			this.myGallery.get(p.getGenre()).get(s).add(p);
+		}
 		Gallery.addPhoto(p);
-
 	}
 
 	public void removePhoto(Photo p) {
-		this.myGallery.remove(p);
+		//mahane ot kolekciqta
+		for(Entry <Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : this.myGallery.entrySet()) {
+			for (Entry <String, ConcurrentSkipListSet<Photo>> e2 : e.getValue().entrySet()) {
+				for (Iterator<Photo> it = e2.getValue().iterator(); it.hasNext();) {
+					Photo a = it.next();
+					if(a.equals(p)){
+						it.remove();
+					}		
+				}
+			}		
+		}
 		Gallery.deletePhoto(p);
 	}
 
@@ -238,6 +262,10 @@ public class User implements Comparable<User> {
 	@Override
 	public String toString() {
 		return this.userName + " - " + this.email;
+	}
+	
+	public Map<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> getMyGallery() {
+		return Collections.unmodifiableMap(myGallery);
 	}
 
 	public Date getJoiningDate() {

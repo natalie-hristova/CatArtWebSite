@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Comment{
 
-	private User profile;// koi go postva ?
+	private User profile;
 	private String content;
 	private LocalDateTime timeOfPosting;
 	private ArrayList<Comment> comments = new ArrayList<>();

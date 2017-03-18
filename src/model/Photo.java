@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import javax.xml.bind.ValidationException;
 
 public class Photo implements Comparable<Photo> {
 	public enum Genre {
@@ -14,7 +15,7 @@ public class Photo implements Comparable<Photo> {
 	private String name;
 	private User profile;
 	private double  rating;
-	private ArrayList<User> pplThatHaveRated = new ArrayList<>();
+	private ArrayList<User> ratedPpl = new ArrayList<>();
 	private LocalDateTime dateOfUploading;
 	private Genre genre;
 	private String about;
@@ -22,7 +23,7 @@ public class Photo implements Comparable<Photo> {
 	private ArrayList<Comment> comments = new ArrayList<>();
 	private File photo;
 	
-	Photo(String name, User profile, Genre genre, String about, String tag) throws InvalidInfoException {
+	Photo(String name, User profile, Genre genre, String about, String tag) throws ValidationException {
 		this.rating = 0;
 		this.dateOfUploading = LocalDateTime.now();
 		this.profile = profile;
@@ -52,23 +53,23 @@ public class Photo implements Comparable<Photo> {
 		this.about = about;
 
 	}
-	public void changeName(String name) throws InvalidInfoException {
+	public void changeName(String name) throws ValidationException {
 		if (name == null || name.isEmpty()) {
-			throw new InvalidInfoException();
+			throw new ValidationException("Not valid genre");
 		} else {
 			this.name = name;
 		}
 	}
 	public void changeRaiting(int rate, User profil) {
-		if (this.pplThatHaveRated.contains(profil)) {
+		if (this.ratedPpl.contains(profil)) {
 			return;
 		}
-		this.pplThatHaveRated.add(profil);
-		this.rating = rating + this.rating*(pplThatHaveRated.size()-1) / this.pplThatHaveRated.size();
+		this.ratedPpl.add(profil);
+		this.rating = rating + this.rating*(ratedPpl.size()-1) / this.ratedPpl.size();
 	}
-	public void changeGenre(Genre genre) throws InvalidInfoException {
+	public void changeGenre(Genre genre) throws ValidationException {
 		if (genre == null && this.genre == null) {
-			throw new InvalidInfoException();
+			throw new ValidationException("Not valid genre");
 		} else {
 			this.genre = genre;
 		}
@@ -102,9 +103,10 @@ public class Photo implements Comparable<Photo> {
 	public double getRating(){
 		return this.rating;
 	}
-	
-	public class InvalidInfoException extends Exception {
+	public String getInfo() {
+		return about;
 	}
+	
 	
 	@Override
 	public int compareTo(Photo p) {
