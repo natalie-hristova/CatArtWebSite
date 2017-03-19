@@ -17,9 +17,7 @@
 							<img src="http://i.imgur.com/sAoFBWl.png"></img>
 							<li><input type="text" name="search" placeholder="Search.."></li>
 							<li class="specialButton"><input type="button" value= "Go!" onclick="doSearch()"></li>
-								
-								<%-- add user stuff --%>
-								
+												<%-- User Stuff--%>
 						</ul>
 					</h4>
 				</nav>
@@ -27,14 +25,9 @@
 
 			<div class = "row">
 				<h1>
-					<div class = "col"><a href="FrontPage.jsp">Welcome</a></div>
-					<div class = "col"><a href="BrowserPage.jsp">Browse</a></div>
+					<div class = "col"><a href="../JSP/FrontPage.jsp">Welcome</a></div>
+					<div class = "col"><a href="../JSP/BrowserPage.jsp">Browse</a></div>
 				</h1>
 			</div>
-
-					
-				</li>
-			</ul>
-		</div>
 	</body>
 </html>
