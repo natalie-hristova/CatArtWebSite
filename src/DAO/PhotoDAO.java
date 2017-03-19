@@ -51,7 +51,7 @@ public class PhotoDAO {
 		}
 	}
 	
-	public synchronized void editPhotoName(Photo p, User u, int i) throws SQLException{
+	public synchronized void editPhotoRaiting(Photo p, User u, int i) throws SQLException{
 		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
 		p.changeRaiting(i, u);
 		st.setString(1, "raiting");
@@ -82,12 +82,12 @@ public class PhotoDAO {
 				st.setString(1, s);
 				tagMap.put(st.getGeneratedKeys().getLong(1), s);
 			}
-			String sql2 = "DELETE FROM tas_photos WHERE  ? ";
+			String sql2 = "DELETE FROM tag_photo WHERE  ? ";
 			st = DBManager.getInstance().getConnection().prepareStatement(sql2);
 			st.setLong(1, p.getPhotoID());
 			
 			for(Entry <Long, String> e : tagMap.entrySet()){
-				String sql3 = "UPDATE tags_photo SET tag_id = ? , photo_id = ? WHERE tag_id = (SELECT tag_id FROM tags where type = ?";
+				String sql3 = "UPDATE tag_photo SET tag_id = ? , photo_id = ? WHERE tag_id = (SELECT tag_id FROM tags where type = ?";
 				st = DBManager.getInstance().getConnection().prepareStatement(sql3);
 				st.setLong(1, e.getKey());
 				st.setLong(2, p.getPhotoID());

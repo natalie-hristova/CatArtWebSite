@@ -3,3 +3,5 @@ Model/.classpath
 Model/.project
 build/
 src/DAO/DBManager.java
+.settings/
+

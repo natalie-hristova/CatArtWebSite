@@ -37,6 +37,7 @@ public class User implements Comparable<User> {
 	private String name;
 	private Calendar dateOfBirth;
 	private Gender gender;
+
 	private String signature;
 	private File avatar;
 	private boolean isLogged;
@@ -48,8 +49,17 @@ public class User implements Comparable<User> {
 	private HashMap<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> myGallery;
 	private HashSet<User> blockedUsers;
 
+	public User(String userName, String password, String email, String name, Calendar dateOfBirth, Gender gender,
+			String signature, String country, Rights r) throws ValidationException {
+		this(userName, password, email, gender, r);
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.signature = signature;
+		this.country = country;
+	}
+
 	public User(String userName, String password, String email, Gender gender, Rights r) throws ValidationException {
-		this.rights = r;
+		this.rights = Rights.MEMBER;
 		this.gender = gender;
 		if (isValidEmail(email)) {
 			this.email = email;
@@ -68,6 +78,12 @@ public class User implements Comparable<User> {
 		this.blockedUsers = new HashSet<>();
 	}
 
+	public User(String username, String password, User.Gender gender) {
+		this.userName = username;
+		this.password = password;
+		this.gender = gender;
+	}
+
 	private boolean isValidPassword(String password) throws ValidationException {
 		if (password != null && password.length() > 3) {
 			return true;
@@ -76,10 +92,10 @@ public class User implements Comparable<User> {
 		}
 	}
 
-	public User name(String name) {
-		this.name = name;
-		return this;
-	}
+//	public User name(String name) {
+//		this.name = name;
+//		return this;
+//	}
 
 	private boolean isValidUserName(String userName) throws ValidationException {
 		if (userName != null && userName.length() > 4) {
@@ -97,15 +113,15 @@ public class User implements Comparable<User> {
 		}
 	}
 
-	public User signature(String s) {
-		this.signature = s;
-		return this;
-	}
-
-	public User dateOfBirth(Calendar dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-		return this;
-	}
+//	public User signature(String s) {
+//		this.signature = s;
+//		return this;
+//	}
+//
+//	public User dateOfBirth(Calendar dateOfBirth) {
+//		this.dateOfBirth = dateOfBirth;
+//		return this;
+//	}
 
 	public void logIn(String userName, String password) {
 		if (Gallery.getProfileByUserName(userName) != null && password.equals(this.password)) {
@@ -123,7 +139,7 @@ public class User implements Comparable<User> {
 
 		if (isLogged && !blockedUsers.contains(p)) {
 			if (!friends.containsValue(p) && p != null) {
-				friends.put(p.getUserName(), p);
+				friends.put(p.getUsername(), p);
 				p.AddFriend(this);
 			}
 		}
@@ -131,7 +147,7 @@ public class User implements Comparable<User> {
 
 	public void RemoveFriend(User p) {
 		if (isLogged && friends.containsValue(p)) {
-			friends.remove(p.getUserName(), p);
+			friends.remove(p.getUsername(), p);
 			p.RemoveFriend(this);
 		}
 	}
@@ -183,12 +199,12 @@ public class User implements Comparable<User> {
 	}
 
 	public void addPhoto(Photo p) {
-		//dobavqne i v kolekciqta na user-a
-		if(!this.myGallery.containsKey(p.getGenre())){
+		// dobavqne i v kolekciqta na user-a
+		if (!this.myGallery.containsKey(p.getGenre())) {
 			this.myGallery.put(p.getGenre(), new HashMap<>());
 		}
-		for(String s : p.getTags()){
-			if(!this.myGallery.get(p.getGenre()).containsKey(s)){
+		for (String s : p.getTags()) {
+			if (!this.myGallery.get(p.getGenre()).containsKey(s)) {
 				this.myGallery.get(p.getGenre()).put(s, new ConcurrentSkipListSet<>());
 			}
 			this.myGallery.get(p.getGenre()).get(s).add(p);
@@ -197,16 +213,16 @@ public class User implements Comparable<User> {
 	}
 
 	public void removePhoto(Photo p) {
-		//mahane ot kolekciqta
-		for(Entry <Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : this.myGallery.entrySet()) {
-			for (Entry <String, ConcurrentSkipListSet<Photo>> e2 : e.getValue().entrySet()) {
+		// mahane ot kolekciqta
+		for (Entry<Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> e : this.myGallery.entrySet()) {
+			for (Entry<String, ConcurrentSkipListSet<Photo>> e2 : e.getValue().entrySet()) {
 				for (Iterator<Photo> it = e2.getValue().iterator(); it.hasNext();) {
 					Photo a = it.next();
-					if(a.equals(p)){
+					if (a.equals(p)) {
 						it.remove();
-					}		
+					}
 				}
-			}		
+			}
 		}
 		Gallery.deletePhoto(p);
 	}
@@ -248,14 +264,8 @@ public class User implements Comparable<User> {
 		return a;
 	}
 
-	public String getUserName() {
+	public String getUsername() {
 		return userName;
-	}
-
-	
-	
-	public void setUserID(long l) {
-		this.userID = l;
 	}
 
 	public void setUserName(String userName) {
@@ -270,19 +280,47 @@ public class User implements Comparable<User> {
 	public String toString() {
 		return this.userName + " - " + this.email;
 	}
-	
+
 	public Map<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> getMyGallery() {
 		return Collections.unmodifiableMap(myGallery);
 	}
 
 	public Date getJoiningDate() {
 		LocalDateTime now = LocalDateTime.now();
-	    Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
-	    Date dateFromOld = Date.from(instant);
+		Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+		Date dateFromOld = Date.from(instant);
 		Month m = joiningDate.getMonth();
 		return dateFromOld;
 	}
 
+	public void setUserID(long l) {
+		this.userID = l;
+	}
+
+	public String getPass() {
+		return this.password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public Date getBirthday() {
+		return dateOfBirth.getTime();
+	}
+	
 	public long getUserID() {
 		return this.userID;
 	}
