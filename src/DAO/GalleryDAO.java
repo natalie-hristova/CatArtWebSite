@@ -36,7 +36,6 @@ public class GalleryDAO {
 		String queryEnd = " LIMIT 20";
 		try {
 			ResultSet result = st.executeQuery(queryStart + img + queryEnd);
-			System.out.println("hi");
 			makeaMap(result, a);
 			ResultSet result1 = st.executeQuery(queryStart + img2 + queryEnd);
 			makeaMap(result1, b);
@@ -87,7 +86,19 @@ public class GalleryDAO {
 		getImgs(s, allphotos);
 	}
 	//works
-	
+	public static void getMoreImgFromThisUser(User user, HashMap<Long, Photo> photos) throws ValidationException, SQLException{
+		String s = "SELECT p.photo_id, p.name, p.user_id, p.genre, p.about, p.photo_link, p.raiting, p.upload_date  FROM photos p WHERE user_id = " + user.getUserID() + ";";
+		getImgs(s, photos);
+	}
+	//works this will do for allMyimg too
+	public static void getImgFromMyFriends(User user, HashMap<Long, Photo> photos) throws ValidationException, SQLException{
+		String s = ("SELECT p.photo_id, p.name, p.user_id, p.genre, p.about, p.photo_link, p.raiting, p.upload_date " +  
+					"FROM photos p JOIN users u ON u.user_id = p.user_id JOIN friends f " + 
+					"ON u.user_id = f.user_id WHERE f.friend_id = " + user.getUserID());
+		getImgs(s, photos);
+	}
+	//works
+
 	private static LinkedHashMap<Long, Photo> getImgs(String s, LinkedHashMap<Long, Photo> allphotos) throws ValidationException {
 		//initialization
 		Statement st = null;
@@ -160,7 +171,7 @@ public class GalleryDAO {
 			allphotos.put(e.getKey(), e.getValue());
 			for(Entry<Long, Photo> e1 : b.entrySet()){
 				allphotos.put(e1.getKey(), e1.getValue());
-				System.out.println(e1.getValue().getName());
+				break;
 			}
 		}
 		return allphotos;
@@ -176,17 +187,17 @@ public class GalleryDAO {
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
-			System.out.println("h2222i");
 		return map;
 	}
 	
 	
-	
-	//no servlet 
-	public static void getImgFromOneUser(int userID){
-		HashMap<Integer, String> photo = new HashMap<>();
-		String s = "SELECT p.photo_id, p.photo_link FROM photos p WHERE user_id = " + userID + ";";
-		//getImgs(s, photo);
+	public static void getImgAllMyFav(User user, HashMap<Long, Photo> photos) throws ValidationException, SQLException{
+		String s = ("SELECT p.photo_id, p.name, p.user_id as creator, p.genre, p.about, p.photo_link, p.raiting, p.upload_date "
+					+ "FROM photos p JOIN gallery_photo gp ON p.photo_id = gp.photo_id " + 
+									"JOIN galleries g ON g.gallery_id = gp.galery_id " + 
+									"JOIN users u ON g.user_id = u.user_id " + 
+									"WHERE g.name = 'favorites' AND u.user_id = " +  user.getUserID());
+		getImgs(s, photos);
 	}
-	//TODO photos of my friends 
+	//TODO still not working need userDAO to work
 }

@@ -282,4 +282,8 @@ public class User implements Comparable<User> {
 		Month m = joiningDate.getMonth();
 		return dateFromOld;
 	}
+
+	public long getUserID() {
+		return this.userID;
+	}
 }

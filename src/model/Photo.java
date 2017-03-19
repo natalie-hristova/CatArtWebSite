@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,10 +15,10 @@ public class Photo implements Comparable<Photo> {
 	
 	private long photoID;
 	private String name;
-	private User profile;
+	private User user;
 	private double  rating;
 	private ArrayList<User> ratedPpl = new ArrayList<>();
-	private LocalDateTime dateOfUploading;
+	private Date dateOfUploading;
 	private Genre genre;
 	private String about;
 	private ArrayList<String> tags = new ArrayList<>();
@@ -26,8 +27,8 @@ public class Photo implements Comparable<Photo> {
 	
 	public Photo(String name, User profile, Genre genre, String about, String photoLink) throws ValidationException {
 		this.rating = 0;
-		this.dateOfUploading = LocalDateTime.now();
-		this.profile = profile;
+		this.dateOfUploading = Date.valueOf(LocalDateTime.now().toString());
+		this.user = profile;
 		this.changeInfo(about);
 		this.changeName(name);
 		this.changeGenre(genre);
@@ -35,7 +36,7 @@ public class Photo implements Comparable<Photo> {
 		// photo = new File();
 	}
 
-	private void addTags(String tag) {
+	public void addTags(String tag) {
 		if (tag.length() == 0) {
 			return;
 		}
@@ -90,9 +91,9 @@ public class Photo implements Comparable<Photo> {
 	}
 
 	public User getProfile() {
-		return this.profile;
+		return this.user;
 	}
-	public LocalDateTime getDateOfUploading() {
+	public Date getDateOfUploading() {
 		return dateOfUploading;
 	}
 	public int getComments(){
@@ -111,6 +112,11 @@ public class Photo implements Comparable<Photo> {
 
 	public String getPhotoLink() {
 		return photoLink;
+	}
+	
+
+	public long getPhotoID() {
+		return photoID;
 	}
 
 	@Override
@@ -140,4 +146,5 @@ public class Photo implements Comparable<Photo> {
 		return "Photo [name=" + name + ", rating=" + rating + ", comments="
 				+ comments.size() + "]";
 	}
+
 }
