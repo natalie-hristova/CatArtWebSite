@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public class DBManager {
+/*public class DBManager {
 	
 	private static DBManager instance;
 	private static final String DB_IP = "localhost";
@@ -41,4 +41,4 @@ public class DBManager {
 		return con;
 	}
 
-}
+}*/

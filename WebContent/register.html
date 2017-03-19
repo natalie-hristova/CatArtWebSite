@@ -1,0 +1,55 @@
+<meta charset="UTF-8">
+<title>Registration</title>
+</head>
+<body>
+	<!-- insert login form here and make POST request to loginservlet -->
+
+	<h3>Please Register</h3>
+	<form action="register" method="post">
+		Username: <input type="text" placeholder="enter username"
+			name="username" required="required"></br> Name: <input type="text"
+			placeholder="enter name" name="name"></br> E-mail: <input
+			type="email" placeholder="enter email" name="email"
+			required="required"></br> Password: <input type="password"
+			placeholder="enter password" name="password" required="required"></br>
+		Confirm Password: <input type="password"
+			placeholder="enter password again" name="password2"
+			required="required"></br> Interests: <input type="text"
+			placeholder="interests" name="interest"></br> 
+			Gender:<select name="gender">
+			<option value="F">F</option>
+			<option value="M">M</option>
+		</select></br> Country: <select name="country">
+			<option value="1">Bulgaria</option>
+			<option value="2">Germany</option>
+			<option value="3">Austria</option>
+			<option value="4">Australia</option>
+			<option value="5"> </option>
+		</select></br> Birth Date : <select name="day">
+			<option value="01">1</option>
+			<option value="02">2</option>
+			<option value="03">3</option>
+			<option value="04">4</option>
+		</select> <select name="month">
+			<option value="01">January</option>
+			<option value="02">February</option>
+			<option value="03">March</option>
+			<option value="04">April</option>
+			<option value="05">May</option>
+			<option value="06">June</option>
+			<option value="07">July</option>
+			<option value="08">August</option>
+			<option value="09">September</option>
+			<option value="10">October</option>
+			<option value="11">November</option>
+			<option value="12">December</option>
+		</select> <select name="year">
+			<option value="1994">1994</option>
+			<option value="1999">1999</option>
+			<option value="2000">2000</option>
+			<option value="2010">2010</option>
+		</select></br> <input type="submit" value="Submit" method="post" action="/register"></br>
+	</form>
+	<a href="index.html">start</a>
+</body>
+</html>

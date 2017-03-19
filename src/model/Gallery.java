@@ -42,14 +42,14 @@ public class Gallery {
 	}
 
 	public static void addProfile(User p) throws ValidationException {
-		if (allUsers.containsKey(p.getUserName())) {
+		if (allUsers.containsKey(p.getUsername())) {
 			throw new ValidationException("A user with this username already exists");
 		} else
-			allUsers.put(p.getUserName(), p);
+			allUsers.put(p.getUsername(), p);
 	}
 
 	public static void deleteProfile(User p, User admin) {
-		if (allUsers.containsKey(p.getUserName())) {
+		if (allUsers.containsKey(p.getUsername())) {
 			if (admin.getRights().equals(User.Rights.ADMIN)) {
 				allUsers.remove(p);
 			}
@@ -97,7 +97,7 @@ public class Gallery {
 		int count = 1;
 		System.out.println("All users:");
 		for (User p : allUsers.values()) {
-			System.out.println("   " + count + ": " + p.getUserName());
+			System.out.println("   " + count + ": " + p.getUsername());
 			count++;
 		}
 	}
@@ -122,7 +122,7 @@ public class Gallery {
 	public static Comparator<Photo> alphabeticProfileComparator = new Comparator<Photo>() {
 		@Override
 		public int compare(Photo o1, Photo o2) {
-			int a = o1.getProfile().getUserName().compareTo(o2.getProfile().getUserName());
+			int a = o1.getProfile().getUsername().compareTo(o2.getProfile().getUsername());
 			if (a == 0) {
 				a = o1.getName().compareTo(o2.getName());
 				if (a == 0) {

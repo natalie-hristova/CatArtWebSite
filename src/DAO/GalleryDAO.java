@@ -15,7 +15,7 @@ public class GalleryDAO {
 	
 	public static HashMap<Integer, String> getAllImgesAtRandom(HashMap<Integer, String> allphotos) throws SQLException{
 
-		Statement st = DBManager.getInstance().getConnection().createStatement();
+		Statement st = Demo.getInstance().getConnection().createStatement();
 		//random photos to start + initialization
 		Random rn = new Random();
 		int img = rn.nextInt(50) + 30; 
@@ -62,7 +62,7 @@ public class GalleryDAO {
 		//initialization
 		Statement st = null;
 		try {
-			st = DBManager.getInstance().getConnection().createStatement();
+			st = Demo.getInstance().getConnection().createStatement();
 		} catch (SQLException e2) {
 			System.out.println("Error in getAllImgesbyGenre");
 		}
