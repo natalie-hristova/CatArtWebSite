@@ -10,6 +10,7 @@ import java.sql.Statement;
 import javax.xml.bind.ValidationException;
 
 import model.User;
+import model.User.Rights;
 
 public class Demo {
 
@@ -20,7 +21,7 @@ public class Demo {
 	private static final String DB_PASS = "Nata1723";
 
 	public static void main(String[] args) throws ValidationException {
-		User naty= new User("natalie","12345","naty@abv.bg",User.Gender.F);
+		User naty= new User("natalie","12345","naty@abv.bg",User.Gender.F, Rights.MEMBER);
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {

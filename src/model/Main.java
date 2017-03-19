@@ -9,6 +9,7 @@ import javax.xml.bind.ValidationException;
 
 import model.Photo.Genre;
 import model.User.Gender;
+import model.User.Rights;
 
 public class Main {
 	public static void main(String[] args) throws ValidationException {
@@ -18,8 +19,8 @@ public class Main {
 		User gesho;
 		User pesho;
 		try {
-			gesho = new User("gesho", "gogi", "gogi123@abv.bg", Gender.M);
-			pesho = new User("pesho", "pepi", "pepi2010@abv.bg", Gender.F);
+			gesho = new User("gesho", "gogi", "gogi123@abv.bg", Gender.M, Rights.MEMBER);
+			pesho = new User("pesho", "pepi", "pepi2010@abv.bg", Gender.F, Rights.MEMBER);
 			Gallery.addProfile(pesho);
 			Gallery.addProfile(gesho);
 			Gallery.addProfile(gesho);
@@ -34,30 +35,6 @@ public class Main {
 
 		Gallery.showProfiles();
 		Gallery.getProfileByUserName("gesho").AddFriend(Gallery.getProfileByUserName("pesho"));
-		Photo a = new Photo("sun1", Gallery.getProfileByUserName("gesho"), Genre.PHOTO, "sun stuff", "Sun,yellow,photo");
-		for (int i = 0; i < 100000000; i++) {
-			// buy some time
-		}
-		Photo b = new Photo("sun2", Gallery.getProfileByUserName("gesho"), Genre.TRADITIONAL, "sun stuff", "Sun,yellow,photo");
-		Gallery.getProfileByUserName("gesho").addPhoto(a);
-		for (int i = 0; i < 100000000; i++) {
-			// buy some time
-		}
-		Gallery.getProfileByUserName("gesho").addPhoto(new Photo("sun123", Gallery.getProfileByUserName("gesho"), Genre.SCETCH, "sun stuff", "Sun,yellow,photo"));
-		Gallery.getProfileByUserName("gesho").addPhoto(b);
-		for (int i = 0; i < 100000000; i++) {
-			// buy some time
-		}
-		Gallery.getProfileByUserName("gesho").addPhoto(new Photo("Slunce", Gallery.getProfileByUserName("gesho"), Genre.SCETCH, "sun stuff", "sun,yelo,photo"));
-		a.addComment(new Comment(Gallery.getProfileByUserName("gesho"), "Hello"));
-		a.addComment(new Comment(Gallery.getProfileByUserName("gesho"), "Hellosss"));
-		a.addComment(new Comment(Gallery.getProfileByUserName("gesho"), "Hello"));
-		b.addComment(new Comment(Gallery.getProfileByUserName("gesho"), "Hellosss"));
-		a.changeRaiting(4, Gallery.getProfileByUserName("gesho"));
-		a.changeRaiting(5, Gallery.getProfileByUserName("gesho"));
-		b.changeRaiting(1, Gallery.getProfileByUserName("gesho"));
-		b.changeRaiting(1, Gallery.getProfileByUserName("gesho"));
-
 		Gallery.showPhoto();
 
 		TreeSet<Photo> alphabetic = new TreeSet<Photo>(Gallery.alphabeticProfileComparator);

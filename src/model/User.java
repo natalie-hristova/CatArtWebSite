@@ -29,6 +29,7 @@ public class User implements Comparable<User> {
 		M, F
 	}
 
+	private long userID;
 	private String userName;
 	private String password;
 	private String email;
@@ -47,8 +48,8 @@ public class User implements Comparable<User> {
 	private HashMap<Photo.Genre, HashMap<String, ConcurrentSkipListSet<Photo>>> myGallery;
 	private HashSet<User> blockedUsers;
 
-	public User(String userName, String password, String email, Gender gender) throws ValidationException {
-		this.rights = Rights.MEMBER;
+	public User(String userName, String password, String email, Gender gender, Rights r) throws ValidationException {
+		this.rights = r;
 		this.gender = gender;
 		if (isValidEmail(email)) {
 			this.email = email;
@@ -249,6 +250,12 @@ public class User implements Comparable<User> {
 
 	public String getUserName() {
 		return userName;
+	}
+
+	
+	
+	public void setUserID(long l) {
+		this.userID = l;
 	}
 
 	public void setUserName(String userName) {

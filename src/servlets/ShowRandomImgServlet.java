@@ -10,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.ValidationException;
 
 import DAO.GalleryDAO;
+import model.Photo;
 
 @WebServlet("/ShowRandomImgs")
 public class ShowRandomImgServlet extends HttpServlet {
@@ -19,14 +21,16 @@ public class ShowRandomImgServlet extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HashMap<Integer, String> list = new HashMap<>();
+		HashMap<Long, Photo> list = new HashMap<>();
 		try {
 			GalleryDAO.getAllImgesAtRandom(list);
 		} catch (SQLException e) {
-			System.out.println("error in AllImagesAtRandom");
+			System.out.println("error in AllImagesAtRandom" + e.getMessage());
+		} catch (ValidationException e) {
+			System.out.println("ops can recreat stuff in randomimg");
 		}
-		for(String s : list.values()){
-			resp.getWriter().write("<img src=\""+ s +"\">");
+		for(Photo p : list.values()){
+			resp.getWriter().write("<img src=\""+ p.getPhotoLink() +"\">");
 		}
 	//    req.setAttribute("list", list);
 	//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
