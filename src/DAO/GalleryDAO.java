@@ -18,7 +18,7 @@ public class GalleryDAO {
 	
 	public static HashMap<Long, Photo> getAllImgesAtRandom(HashMap<Long, Photo> allphotos) throws SQLException, ValidationException{
 
-		Statement st = Demo.getInstance().getConnection().createStatement();
+		Statement st = DBManager.getInstance().getConnection().createStatement();
 		//random photos to start + initialization
 		ResultSet rez = null;
 		rez = st.executeQuery("Select count(photo_id) as num from photos");
