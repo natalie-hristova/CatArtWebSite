@@ -17,8 +17,8 @@
 							<img src="http://i.imgur.com/sAoFBWl.png"></img>
 							<li><input type="text" name="search" placeholder="Search.."></li>
 							<li class="specialButton"><input type="button" value= "Go!" onclick="doSearch()"></li>
-							<li class="goRight"><a href="../HTML/Registration.html">Join us</a></li>
-							<li class="goRight"><a href="../HTML/LogInPage.html">Log In</a></li>
+							<li class="goRight"><a href="../HTML/register.html">Join us</a></li>
+							<li class="goRight"><a href="../HTML/index.html">Log In</a></li>
 						</ul>
 					</h4>
 				</nav>
@@ -26,8 +26,8 @@
 
 			<div class = "row">
 				<h1>
-					<div class = "col"><a href="FrontPage.jsp">Welcome</a></div>
-					<div class = "col"><a href="BrowserPage.jsp">Browse</a></div>
+					<div class = "col"><a href="../JSP/FrontPage.jsp">Welcome</a></div>
+					<div class = "col"><a href="../JSP/BrowserPage.jsp">Browse</a></div>
 				</h1>
 			</div>
 			<div>

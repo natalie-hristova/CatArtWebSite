@@ -1,0 +1,66 @@
+.moveToCenter{
+	margin: 0 20px 0 0;
+	padding: 30px;
+
+}
+
+div form div{
+	border-style: solid;
+ 	border-width: 1px;
+	border-color: #7ba49d;
+	padding: 0;
+	margin: 0;
+
+}
+div form div h4{
+	border-style: solid;
+ 	border-width: 1px;
+	border-color: #7ba49d;
+	padding: 0;
+	margin: 0;
+	background: #d9f0ec;
+}
+
+div li h4 ul {
+	list-style-type: none;
+	color: #549dab;
+	margin: 0;
+	background: #d9f0ec;
+	padding: 5px 15px 5px 20px;
+	border-color: #838c8a;
+    border-style: solid;
+    border-width: 0 1px 0 0;
+    font-family: "Arial", Narrow, serif;
+    font-weight: 100;
+}
+
+.separate{
+	padding: 10px;
+}
+
+.move{
+	marging: 0 0 0 200px;
+	padding: 10px;
+}
+
+.styleImput{
+	 width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+.styleSubmit{
+	   width: 100%;
+    background-color: #4783a4;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

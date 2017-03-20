@@ -29,7 +29,7 @@ public class User implements Comparable<User> {
 		M, F
 	}
 
-	private long id;
+	private long userID;
 	private String userName;
 	private String password;
 	private String email;
@@ -50,15 +50,15 @@ public class User implements Comparable<User> {
 	private HashSet<User> blockedUsers;
 
 	public User(String userName, String password, String email, String name, Calendar dateOfBirth, Gender gender,
-			String signature, String country) throws ValidationException {
-		this(userName, password, email, gender);
+			String signature, String country, Rights r) throws ValidationException {
+		this(userName, password, email, gender, r);
 		this.name = name;
 		this.dateOfBirth = dateOfBirth;
 		this.signature = signature;
 		this.country = country;
 	}
 
-	public User(String userName, String password, String email, Gender gender) throws ValidationException {
+	public User(String userName, String password, String email, Gender gender, Rights r) throws ValidationException {
 		this.rights = Rights.MEMBER;
 		this.gender = gender;
 		if (isValidEmail(email)) {
@@ -293,9 +293,8 @@ public class User implements Comparable<User> {
 		return dateFromOld;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-
+	public void setUserID(long l) {
+		this.userID = l;
 	}
 
 	public String getPass() {
@@ -321,5 +320,8 @@ public class User implements Comparable<User> {
 	public Date getBirthday() {
 		return dateOfBirth.getTime();
 	}
-
+	
+	public long getUserID() {
+		return this.userID;
+	}
 }

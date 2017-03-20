@@ -20,6 +20,7 @@ import DAO.Demo;
 import DAO.UserDAO;
 import model.User;
 import model.User.Gender;
+import model.User.Rights;
 
 @WebServlet("/register")
 public class RegistrationServlet extends HttpServlet {
@@ -85,7 +86,7 @@ public class RegistrationServlet extends HttpServlet {
 		System.out.println(date);
 		try {
 			user = new User(username, password2, email, name, date, UserDAO.getInstance().parseGender(gender),
-					interests, country);
+					interests, country, Rights.MEMBER);
 		} catch (ValidationException e) {
 			errorCode +=1;// za nevaliden user
 			System.out.println("Invalid user");
@@ -111,7 +112,7 @@ public class RegistrationServlet extends HttpServlet {
 			ResultSet res = st.getGeneratedKeys();
 			res.next();
 			long id = res.getLong(1);
-			user.setId(id);
+			user.setUserID(id);
 			UserDAO.getInstance().getAllUsers().put(user.getUsername(), user);
 			}else{
 				errorCode +=100;//ako go ima v db

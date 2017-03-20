@@ -10,6 +10,7 @@ import java.sql.Statement;
 import javax.xml.bind.ValidationException;
 
 import model.User;
+import model.User.Rights;
 
 public class Demo {
 
@@ -50,7 +51,7 @@ public class Demo {
 	private void x() {
 		User naty = null;
 		try {
-			naty = new User("natalie", "12345", "naty@abv.bg", User.Gender.F);
+			naty = new User("natalie", "12345", "naty@abv.bg", User.Gender.F, Rights.MEMBER);
 		} catch (ValidationException e1) {
 			System.out.println("this user already exists");
 			e1.printStackTrace();
@@ -86,6 +87,4 @@ public class Demo {
 		}
 
 	}
-
-
 }

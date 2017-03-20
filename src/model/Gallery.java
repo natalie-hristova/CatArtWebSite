@@ -119,72 +119,10 @@ public class Gallery {
 		return Collections.unmodifiableMap(Gallery.gallery);
 	}	
 
-	public static Comparator<Photo> alphabeticProfileComparator = new Comparator<Photo>() {
-		@Override
-		public int compare(Photo o1, Photo o2) {
-			int a = o1.getProfile().getUsername().compareTo(o2.getProfile().getUsername());
-			if (a == 0) {
-				a = o1.getName().compareTo(o2.getName());
-				if (a == 0) {
-					return o1.getDateOfUploading().compareTo(o2.getDateOfUploading());
-				}
-			}
-			return a;
-		}
-	};
-	public static Comparator<Photo> noCommentsComparator = new Comparator<Photo>() {
-		@Override
-		public int compare(Photo o1, Photo o2) {
-			if (o1.getRating() > o2.getRating()) {
-				return 1;
-			} else {
-				if (o1.getRating() < o2.getRating()) {
-					return -1;
-				} else {
-					return o1.compareTo(o2);
-				}
-			}
-		}
-	};
-	public static Comparator<Photo> mostRatingStarsComparator = new Comparator<Photo>() {
-		@Override
-		public int compare(Photo o1, Photo o2) {
-			if (o1.getRating() > o2.getRating()) {
-				return -1;
-			} else {
-				if (o1.getRating() < o2.getRating()) {
-					return 1;
-				} else {
-					return o1.compareTo(o2);
-				}
-			}
-		}
-	};
-
-	public static Comparator<Photo> mostCommentsComparator = new Comparator<Photo>() {
-		@Override
-		public int compare(Photo o1, Photo o2) {
-			if (o1.getRating() > o2.getRating()) {
-				return -1;
-			} else {
-				if (o1.getRating() < o2.getRating()) {
-					return 1;
-				} else {
-					return o1.compareTo(o2);
-				}
-			}
-		}
-	};
-	public static Comparator<Photo> timeOfUploadComparator = new Comparator<Photo>() {
-		@Override
-		public int compare(Photo o1, Photo o2) {
-			int a = o1.getDateOfUploading().compareTo(o2.getDateOfUploading());
-			if (a == 0) {
-				o1.compareTo(o2);
-			}
-			return a;
-		}
-	};
-
+	public static Comparator<Photo> alphabeticProfileComparator;
+	public static Comparator<Photo> noCommentsComparator;
+	public static Comparator<Photo> mostCommentsComparator;
+	public static Comparator<Photo> mostRatingStarsComparator;	
+	public static Comparator<Photo> timeOfUploadComparator;
 
 }

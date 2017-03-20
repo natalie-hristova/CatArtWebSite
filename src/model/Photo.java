@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,30 +12,31 @@ public class Photo implements Comparable<Photo> {
 	public enum Genre {
 		PHOTO, DIGITAL, TRADITIONAL, CRAFTS, COMICS, FANART, SCETCH;
 	}
-
+	
+	private long photoID;
 	private String name;
-	private User profile;
+	private User user;
 	private double  rating;
 	private ArrayList<User> ratedPpl = new ArrayList<>();
-	private LocalDateTime dateOfUploading;
+	private Date dateOfUploading;
 	private Genre genre;
 	private String about;
 	private ArrayList<String> tags = new ArrayList<>();
 	private ArrayList<Comment> comments = new ArrayList<>();
-	private File photo;
+	private String photoLink;
 	
-	Photo(String name, User profile, Genre genre, String about, String tag) throws ValidationException {
+	public Photo(String name, User profile, Genre genre, String about, String photoLink) throws ValidationException {
 		this.rating = 0;
-		this.dateOfUploading = LocalDateTime.now();
-		this.profile = profile;
+		this.dateOfUploading = Date.valueOf(LocalDateTime.now().toString());
+		this.user = profile;
 		this.changeInfo(about);
 		this.changeName(name);
 		this.changeGenre(genre);
+		this.photoLink = photoLink;
 		// photo = new File();
-		this.SeparateTags(tag.toLowerCase());
 	}
 
-	private void SeparateTags(String tag) {
+	public void addTags(String tag) {
 		if (tag.length() == 0) {
 			return;
 		}
@@ -44,11 +46,9 @@ public class Photo implements Comparable<Photo> {
 		}
 		this.tags.add(tag.substring(0, tag.indexOf(',')));
 		String a = tag.substring(tag.indexOf(',') + 1).trim();
-		SeparateTags(a);
+		addTags(a);
 	}
-	public void addNewTags(String tag) {
-		SeparateTags(tag);
-	}
+	
 	public void changeInfo(String about) {
 		this.about = about;
 
@@ -79,7 +79,6 @@ public class Photo implements Comparable<Photo> {
 			comments.add(c);
 		}		
 	}
-
 	
 	public String getName() {
 		return name;
@@ -92,9 +91,9 @@ public class Photo implements Comparable<Photo> {
 	}
 
 	public User getProfile() {
-		return this.profile;
+		return this.user;
 	}
-	public LocalDateTime getDateOfUploading() {
+	public Date getDateOfUploading() {
 		return dateOfUploading;
 	}
 	public int getComments(){
@@ -107,7 +106,19 @@ public class Photo implements Comparable<Photo> {
 		return about;
 	}
 	
+	public void setPhotoID(long photoID) {
+		this.photoID = photoID;
+	}
+
+	public String getPhotoLink() {
+		return photoLink;
+	}
 	
+
+	public long getPhotoID() {
+		return photoID;
+	}
+
 	@Override
 	public int compareTo(Photo p) {
 		int a = this.genre.compareTo(p.genre);
@@ -135,4 +146,5 @@ public class Photo implements Comparable<Photo> {
 		return "Photo [name=" + name + ", rating=" + rating + ", comments="
 				+ comments.size() + "]";
 	}
+
 }
