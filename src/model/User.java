@@ -29,7 +29,7 @@ public class User implements Comparable<User> {
 		M, F
 	}
 
-	private long userID;
+	private long userId;
 	private String userName;
 	private String password;
 	private String email;
@@ -92,11 +92,6 @@ public class User implements Comparable<User> {
 		}
 	}
 
-//	public User name(String name) {
-//		this.name = name;
-//		return this;
-//	}
-
 	private boolean isValidUserName(String userName) throws ValidationException {
 		if (userName != null && userName.length() > 4) {
 			return true;
@@ -112,16 +107,6 @@ public class User implements Comparable<User> {
 			throw new ValidationException("Not valid email");
 		}
 	}
-
-//	public User signature(String s) {
-//		this.signature = s;
-//		return this;
-//	}
-//
-//	public User dateOfBirth(Calendar dateOfBirth) {
-//		this.dateOfBirth = dateOfBirth;
-//		return this;
-//	}
 
 	public void logIn(String userName, String password) {
 		if (Gallery.getProfileByUserName(userName) != null && password.equals(this.password)) {
@@ -294,7 +279,7 @@ public class User implements Comparable<User> {
 	}
 
 	public void setUserID(long l) {
-		this.userID = l;
+		this.userId = l;
 	}
 
 	public String getPass() {
@@ -320,8 +305,21 @@ public class User implements Comparable<User> {
 	public Date getBirthday() {
 		return dateOfBirth.getTime();
 	}
-	
+
 	public long getUserID() {
-		return this.userID;
+		return this.userId;
+	}
+
+	public void setBirthday(LocalDateTime bday) {
+		this.dateOfBirth.set(bday.getYear(), bday.getMonthValue(), bday.getDayOfMonth());
+				
+	}
+
+	public void setJoiningDate(LocalDateTime joining_date) {
+		this.joiningDate = joining_date;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

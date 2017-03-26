@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import DAO.Demo;
+import DAO.DBManager;
 import DAO.UserDAO;
-@WebServlet("/login")
+@WebServlet("/HTML/login")
 public class LoginServlet extends HttpServlet {
 
 	@Override
@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void destroy() {
 		try {
-			Demo.getInstance().getConnection().close();
+			DBManager.getInstance().getConnection().close();
 		} catch (SQLException e) {
 			System.out.println("Log in servlet not closed!");
 			e.printStackTrace();
