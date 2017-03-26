@@ -12,9 +12,9 @@ import javax.xml.bind.ValidationException;
 import model.User;
 import model.User.Rights;
 
-public class Demo {
+public class DBManager {
 
-	private static Demo instance;
+	private static DBManager instance;
 	private static final String DB_IP = "127.0.0.1";
 	private static final String DB_PORT = "3306";
 	private static final String DB_NAME = "natadb";
@@ -22,7 +22,7 @@ public class Demo {
 	private static final String DB_PASS = "Nata1723";
 	private Connection con = null;
 
-	private Demo() {
+	private DBManager() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -37,10 +37,10 @@ public class Demo {
 		}
 	}
 
-	public static synchronized Demo getInstance() {
+	public static synchronized DBManager getInstance() {
 
 		if (instance == null) {
-			instance = new Demo();
+			instance = new DBManager();
 		}
 		return instance;
 	}

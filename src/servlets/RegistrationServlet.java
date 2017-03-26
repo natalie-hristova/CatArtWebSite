@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.ValidationException;
 
-import DAO.Demo;
+import DAO.DBManager;
 import DAO.UserDAO;
 import model.User;
 import model.User.Gender;
@@ -97,7 +97,7 @@ public class RegistrationServlet extends HttpServlet {
 			if( !UserDAO.getInstance().existsInDB(user) && user!=null){
 
 			String sql = "INSERT INTO users (name, username, password,email,signiture,country_id,birthday,gender,rights,joining_date) values (?,?,?,?,?,?,?,?,?,?)";
-			PreparedStatement st = Demo.getInstance().getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, user.getName());
 			st.setString(2, user.getUsername());
 			st.setString(3, user.getPass());// TODO hash pass
@@ -126,7 +126,7 @@ public class RegistrationServlet extends HttpServlet {
 
 	public void destroy() {
 		try {
-			Demo.getInstance().getConnection().close();
+			DBManager.getInstance().getConnection().close();
 		} catch (SQLException e) {
 			System.out.println("Log in servlet not closed!");
 			e.printStackTrace();
