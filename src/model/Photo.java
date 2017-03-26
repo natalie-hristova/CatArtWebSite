@@ -1,12 +1,19 @@
 package model;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import javax.xml.bind.ValidationException;
+
+import org.apache.commons.fileupload.FileItemStream;
+
+import DAO.Static;
 
 public class Photo implements Comparable<Photo> {
 	public enum Genre {
@@ -145,6 +152,35 @@ public class Photo implements Comparable<Photo> {
 	public String toString() {
 		return "Photo [name=" + name + ", rating=" + rating + ", comments="
 				+ comments.size() + "]";
+	}	
+	
+	public static boolean processFile(String a, FileItemStream file){
+		File f = new File("D:/DB_IMG/" + Static.fileNum + ".jpg");
+		if(!f.exists()){
+			FileOutputStream fos = null;
+			try {
+				f.createNewFile();
+				fos = new FileOutputStream(f);
+				InputStream is = file.openStream();
+				int x = 0;
+				byte[] b = new byte[1024];
+				while((x = is.read(b)) != -1){
+					fos.write(b, 0, x);
+				}
+				fos.flush();
+				Static.fileNum++;
+				return true;
+			} catch (IOException e) {
+				System.out.println("Ops can creat file");
+			}
+			finally {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					System.out.println("close what? upload what??");
+				}
+			}		
+		}	
+		return false;
 	}
-
 }
