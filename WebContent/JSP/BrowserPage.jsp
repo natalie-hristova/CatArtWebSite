@@ -22,7 +22,7 @@
 						</ul>
 					</h4>
 				</nav>
-			</header>
+			</header> 
 
 			<div class = "row">
 				<h1>

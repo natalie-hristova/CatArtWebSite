@@ -109,7 +109,6 @@ public class UserDAO {
 		// Create user with right rights :)
 		if (res.next()) {
 			Rights r = Rights.MEMBER;
-			;
 			if (res.getString("rights") == "admin") {
 				r = Rights.ADMIN;
 			}
