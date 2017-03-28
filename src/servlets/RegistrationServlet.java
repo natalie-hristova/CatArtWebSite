@@ -30,7 +30,7 @@ public class RegistrationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int result = 5;
 
-		String fileName= "register.html";
+		String fileName= "HTML/register.html";
 		try {
 			 result = addUser(req);
 		} catch (SQLException e) {
@@ -38,24 +38,23 @@ public class RegistrationServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		if (result == 0) {
-			fileName = "home.html";
+			fileName = "HTML/home.html";
 		}
 		if (result==1) {
-			fileName= "loginFailed.html";
+			fileName= "HTML/loginFailed.html";
 		}
 		if (result==10) {
-			fileName= "register.html";
+			fileName= "HTML/loginFailed.html";
 			// opravi gre6kata tam s parolata
 		}
 		if (result ==100) {
-			fileName= "register.html";
+			fileName= "HTML/loginFailed.html";
 			// ima go v db
 		}if (result ==11) {
-			fileName= "register.html";
+			fileName= "HTML/loginFailed.html";
 			// ne si validen gram
 		}
-		RequestDispatcher rd = req.getRequestDispatcher(fileName);
-		rd.forward(req, resp);
+		resp.sendRedirect(fileName);
 	}
 
 	private boolean isValidPasword(String password, String password2) {

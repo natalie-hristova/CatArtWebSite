@@ -4,10 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.ValidationException;
+
+import com.mysql.fabric.xmlrpc.base.Array;
 
 import model.User;
 import model.User.Gender;
@@ -65,7 +69,35 @@ public class UserDAO {
 			}
 		}
 		System.out.println(allUsers + "===============================================");
+
 		return allUsers;
+	}
+
+	public List<String> getListOfUsers() {
+		List<String> users = new ArrayList();
+		String sql = "SELECT user_id, username, password, gender FROM users;";
+		PreparedStatement st;
+		ResultSet res = null;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			res = st.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			while (res.next()) {
+				User u = new User(res.getString("username"), res.getString("password"),
+						parseGender(res.getString("gender")));
+				u.setUserID(res.getInt("user_id"));
+				users.add(res.getString("username"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return users;
 	}
 
 	public User.Gender parseGender(String gender) {
@@ -98,11 +130,12 @@ public class UserDAO {
 		Statement st = DBManager.getInstance().getConnection().createStatement();
 		ResultSet res = null;
 		try {
-			
+
 			res = st.executeQuery(sql);
 			String rights = res.getString("rights");
-			String gender=res.getString("gender");
-			User user = new User(res.getString("username"), res.getString("password"), res.getString("email"),getGender(gender), getRights(rights));
+			String gender = res.getString("gender");
+			User user = new User(res.getString("username"), res.getString("password"), res.getString("email"),
+					getGender(gender), getRights(rights));
 		} catch (SQLException e) {
 			System.out.println("cant get user");
 		}
@@ -138,30 +171,33 @@ public class UserDAO {
 		}
 	}
 
-
-	public static User getUser(String username){
+	public User getUser(String username) {
 		User user = null;
-		String sql = "SELECT  user_id, password, email, gender, rights,user_id, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE username = "
-				+ username + ";";
-		Statement st= null;
+		String sql = "SELECT  user_id, password, email, gender, rights,user_id, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE username = '"
+				+ username + "';";
+		System.out.println("=========================================================              "+sql);
+		PreparedStatement st = null;
 		try {
-			st = DBManager.getInstance().getConnection().createStatement();
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		ResultSet res = null;
 		try {
-			
+
 			res = st.executeQuery(sql);
+			
+			System.out.println("++++++++++++++++++++++++++++++++++++              "+res.next());
 			String rights = res.getString("rights");
-			String gender=res.getString("gender");
+			String gender = res.getString("gender");
 			try {
-				 user = new User(res.getString("username"), res.getString("password"), res.getString("email"),getGender(gender), getRights(rights));
-				 user.setBirthday(res.getTimestamp("birthday").toLocalDateTime());
-				 user.setJoiningDate((res.getTimestamp("joining_date")).toLocalDateTime());
-				 user.setUserID(res.getLong("user_id"));
-				 user.setName(res.getString("name"));
+				user = new User(res.getString("username"), res.getString("password"), res.getString("email"),
+						getGender(gender), getRights(rights));
+				user.setBirthday(res.getTimestamp("birthday").toLocalDateTime());
+				user.setJoiningDate((res.getTimestamp("joining_date")).toLocalDateTime());
+				user.setUserID(res.getLong("user_id"));
+				user.setName(res.getString("name"));
 			} catch (ValidationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

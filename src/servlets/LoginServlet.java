@@ -9,10 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import DAO.DBManager;
 import DAO.UserDAO;
-@WebServlet("/HTML/login")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
 	@Override
@@ -20,21 +21,30 @@ public class LoginServlet extends HttpServlet {
 		//TODO try to validate login. 
 		String user = req.getParameter("user");
 		String pass = req.getParameter("password");
-		String fileName;
+		
 		try {
 			if(UserDAO.getInstance().validLogin(user, pass)){
 				System.out.println("Lognahme se!");
-				fileName = "home.html";
+				//fileName = "HTML/home.html";
+				
+				
+				//if valid login
+				HttpSession session = req.getSession();
+				session.setAttribute("user", user);
+				session.setAttribute("logged", true);
+				resp.sendRedirect("HTML/home.html");
 			}
 			else{
-				fileName = "loginFailed.html";
+				//fileName = "HTML/loginFailed.html";
+				resp.sendRedirect("HTML/loginFailed.html");
 			}
 		} catch (SQLException e) {
 			System.out.println("Error loging in - " + e.getMessage());
-			fileName = "loginFailed.html";
+			//fileName = "HTML/loginFailed.html";
+			resp.sendRedirect("HTML/loginFailed.html");
 		}
-		RequestDispatcher rd = req.getRequestDispatcher(fileName);
-		rd.forward(req, resp);
+		//RequestDispatcher rd = req.getRequestDispatcher(fileName);
+	//	rd.forward(req, resp);
 		
 	}
 	

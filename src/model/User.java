@@ -122,7 +122,7 @@ public class User implements Comparable<User> {
 
 	public void AddFriend(User p) {
 
-		if (isLogged && !blockedUsers.contains(p)) {
+		if ( !blockedUsers.contains(p)) {
 			if (!friends.containsValue(p) && p != null) {
 				friends.put(p.getUsername(), p);
 				p.AddFriend(this);
@@ -131,14 +131,14 @@ public class User implements Comparable<User> {
 	}
 
 	public void RemoveFriend(User p) {
-		if (isLogged && friends.containsValue(p)) {
+		if ( friends.containsValue(p)) {
 			friends.remove(p.getUsername(), p);
 			p.RemoveFriend(this);
 		}
 	}
 
 	public void blockProfile(User p) {
-		if (isLogged && !blockedUsers.contains(p)) {
+		if ( !blockedUsers.contains(p)) {
 			blockedUsers.add(p);
 			if (friends.containsKey(p)) {
 				friends.remove(p);
