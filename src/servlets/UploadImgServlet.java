@@ -1,61 +1,54 @@
 package servlets;
 
+import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import DAO.Static;
-import model.Photo;
-
-@WebServlet("/uploadImage")
+@WebServlet("/UploadImgServlet")
 public class UploadImgServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/html");
-		boolean isMultipath = ServletFileUpload.isMultipartContent(req);
-		if(isMultipath){
-			ServletFileUpload fileupload = new ServletFileUpload();
-			try {
-				FileItemIterator fii = fileupload.getItemIterator(req);
-				while (fii.hasNext()){
-					FileItemStream item = fii.next();
-					if(item.isFormField()){
-						//do field processing
-						String fieldName = item.getFieldName();
-						InputStream is = item.openStream();
-						byte[] b = new byte[is.available()];
-						is.read(b);
-						String value = new String(b);
-						resp.getWriter().println(fieldName + ": " + value + "</br>");
-					}
-					//do file upload processing
-					String path = getServletContext().getRealPath("/");
-					//call method to upload ile
-					if(Photo.processFile(path, item)){
-						resp.getWriter().write("Upload Sucsecfull");
-					}else{
-						resp.getWriter().write("Umage not uploaded");
-					}
-				}
-			} catch (FileUploadException e) {
-				System.out.println("file upload fail");
-			}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String saveFile = "";
+			String contentType = request.getContentType();
+		if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0)) {
+   			DataInputStream in = new DataInputStream(request.getInputStream());
+    		int formDataLength = request.getContentLength();
+   			byte dataBytes[] = new byte[formDataLength];
+   			int byteRead = 0;
+    		int totalBytesRead = 0;
+    		while (totalBytesRead < formDataLength) {
+          		byteRead = in.read(dataBytes, totalBytesRead, formDataLength);
+          		totalBytesRead += byteRead;
+    		}
+    		String file = new String(dataBytes);
+    		saveFile = file.substring(file.indexOf("filename=\"") + 10);
+    		saveFile = saveFile.substring(0, saveFile.indexOf("\n"));
+    		saveFile = saveFile.substring(saveFile.lastIndexOf("\\") + 1, saveFile.indexOf("\""));
+    		int lastIndex = contentType.lastIndexOf("=");
+    		String boundary = contentType.substring(lastIndex + 1, contentType.length());
+    		int pos;
+    		pos = file.indexOf("filename=\"");
+    		pos = file.indexOf("\n", pos) + 1;
+    		pos = file.indexOf("\n", pos) + 1;
+    		pos = file.indexOf("\n", pos) + 1;
+    		int boundaryLocation = file.indexOf(boundary, pos) - 4;
+    		int startPos = ((file.substring(0, pos)).getBytes()).length;
+    		int endPos = ((file.substring(0, boundaryLocation)).getBytes()).length;
+    		saveFile = "D:/DB_IMG/1/" + saveFile;
+    		File ff = new File(saveFile);
+    		FileOutputStream fileOut = new FileOutputStream(ff);
+    		fileOut.write(dataBytes, startPos, (endPos - startPos));
+    		fileOut.flush();
+    		fileOut.close();
 		}
-		//else do nothing
 	}
+
 }

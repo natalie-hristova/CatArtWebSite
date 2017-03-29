@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="java.util.HashMap" %>
+    pageEncoding="ISO-8859-1"%>
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
 		<head>
@@ -36,7 +37,13 @@
 						<h4>
 							<ul>
 							<li class="firstInLine">SORT</li>
-							<li> <a href="BrowserPage.jsp">What's Hot</a></li>
+							<% int z=1; %>
+							<form  method="post" action="/ImgWithMostComments" >
+								<li>
+					"C:/Users/Nono/Desktop/TimeExample/src/controller/TimeServlet.java"			    <input type="hidden" name="PhotoType" value="<%=z%>" />
+									<input type="submit" value="What's Hot"/>
+								</li>
+							</form>		
 							<li> <a href="BrowserPage.jsp">Undiscovered</a></li>
 							<li> <a href="BrowserPage.jsp">Most Stars</a></li>
 							<li> <a href="BrowserPage.jsp">Alphabetic</a></li>
@@ -55,18 +62,11 @@
 					</h4>
 				</li>
 				<li> 
-  				<%-- 
-  					HashMap<Integer, String> list = (HashMap<Integer, String>) request.getAttribute("/ShowImg");
-  					out.print(list.isEmpty());
-				--%>
-				<%
-					int k = 13;
+  				<% 	int k = 13;
 						for(int i =1; i< k ; i++){
-						String s = "D:/DB_IMG/";
-						out.print("<div  class = \"imgfloat\"><a href=\"ImgPage.jsp\"><img src=\""+ (s+i) + ".jpg\"></img></a></div>");
-					} 
-				%>
-					
+						String s = "../DB_IMG/";
+						out.print("<div  class = \"imgfloat\"><a href=\"ImgPage.jsp\"><img src=\""+ (s+i) + ".jpg\"></img></a></div>");	} 
+				%>		
 				</li>
 			</ul>
 		</div>

@@ -91,42 +91,36 @@ public class UserDAO {
 		}
 	}
 
-	public static User getUser(long id) throws ValidationException, SQLException {
-		User u = null;
-		String sql = "SELECT  username, password, email, gender, rights,user_id, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE user_id = "
-				+ id + ";";
-		Statement st = DBManager.getInstance().getConnection().createStatement();
-		ResultSet res = null;
-		try {
-			
-			res = st.executeQuery(sql);
-			String rights = res.getString("rights");
-			String gender=res.getString("gender");
-			User user = new User(res.getString("username"), res.getString("password"), res.getString("email"),getGender(gender), getRights(rights));
-		} catch (SQLException e) {
-			System.out.println("cant get user");
-		}
-		// Create user with right rights :)
-		if (res.next()) {
-			Rights r = Rights.MEMBER;
-			;
-			if (res.getString("rights") == "admin") {
-				r = Rights.ADMIN;
-			}
-			if (res.getString("rights") == "moderator") {
-				r = Rights.MODERATOR;
-			}
-			// and right gender
-			if (res.getString("gender") == "M") {
-				u = new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.M, r);
-			} else {
-				u = new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.F, r);
-			}
-			u.setUserID(res.getLong("user_id"));
-		}
-		// set all other stuff
-		return u;
-	}
+	public static User getUser1(long id) throws ValidationException, SQLException{
+ 		User u = null;
+ 		String sql = "SELECT user_id, nickname, password, email, real_name, birthday, signature, avatar, registration_date, gender, rights, country_id FROM users WHERE user_id = " + id + ";";
+ 		Statement st = DBManager.getInstance().getConnection().createStatement();
+ 		ResultSet res = null;
+ 		try {
+ 			res = st.executeQuery(sql);
+ 		} catch (SQLException e) {
+ 			System.out.println("cant get user");
+ 		}
+ 		//Create user with right rights :)
+ 		if(res.next()){
+ 			Rights r = Rights.MEMBER;;
+ 			if(res.getString("rights") == "admin"){
+ 				r = Rights.ADMIN;
+ 			}
+ 			if(res.getString("rights") == "moderator"){
+ 				r = Rights.MODERATOR;
+ 			}
+ 			//and right gender
+ 			if (res.getString("gender") == "M"){
+ 				u = new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.M, r);
+ 			}else{
+ 				u =  new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.F, r);
+ 			}
+ 			u.setUserID(res.getLong("user_id"));
+ 		}
+ 		//set all other stuff
+ 		return u;
+ 	}
 
 	private static Gender getGender(String gender) {
 		switch (gender) {
@@ -140,36 +134,34 @@ public class UserDAO {
 	}
 
 
-	public static User getUser(String username){
-		User user = null;
-		String sql = "SELECT  user_id, password, email, gender, rights,user_id, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE username = "
-				+ username + ";";
-		Statement st= null;
-		try {
-			st = DBManager.getInstance().getConnection().createStatement();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+public static User getUser(long id) throws ValidationException, SQLException{
+		User u = null;
+		String sql = "SELECT user_id, nickname, password, email, real_name, birthday, signature, avatar, registration_date, gender, rights, country_id FROM users WHERE user_id = " + id + ";";
+		Statement st = DBManager.getInstance().getConnection().createStatement();
 		ResultSet res = null;
 		try {
-			
 			res = st.executeQuery(sql);
-			String rights = res.getString("rights");
-			String gender=res.getString("gender");
-			try {
-				 user = new User(res.getString("username"), res.getString("password"), res.getString("email"),getGender(gender), getRights(rights));
-				 user.setBirthday(res.getTimestamp("birthday").toLocalDateTime());
-				 user.setJoiningDate((res.getTimestamp("joining_date")).toLocalDateTime());
-				 user.setUserID(res.getLong("user_id"));
-				 user.setName(res.getString("name"));
-			} catch (ValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		} catch (SQLException e) {
-			System.out.println("cant get user");
+		 	System.out.println("cant get user");
 		}
-		return user;
+		 //Create user with right rights :)
+		if(res.next()){
+		 	Rights r = Rights.MEMBER;
+		 	if(res.getString("rights") == "admin"){
+		 		r = Rights.ADMIN;
+		 	}
+		 	if(res.getString("rights") == "moderator"){
+		 		r = Rights.MODERATOR;
+		 	}
+		 //and right gender
+		 	if (res.getString("gender") == "M"){
+		 		u = new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.M, r);
+		 	}else{
+		 		u =  new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.F, r);
+		 	}
+		 	u.setUserID(res.getLong("user_id"));
+		 }
+		//set all other stuff
+		return u;
 	}
 }

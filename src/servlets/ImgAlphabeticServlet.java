@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +26,12 @@ public class ImgAlphabeticServlet extends HttpServlet {
 		} catch (ValidationException | SQLException e) {
 			System.out.println("ops error in alphabeticbyuser" + e.getMessage());
 		}
-		for(Photo p : list.values()){
+	    req.setAttribute("list", list);
+	    for(Photo p : list.values()){
 			resp.getWriter().write("<img src=\""+ p.getPhotoLink() +"\">");
-		}
-	//    req.setAttribute("list", list);
-	//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
+	    }
+	  //  RequestDispatcher rd = getServletContext().getRequestDispatcher("../JSP/BrowserPage.jsp");
+	//    rd.forward(req, resp);
 	}
 }
 
