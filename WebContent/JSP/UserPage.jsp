@@ -8,26 +8,44 @@
 			<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
 			<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
 			<link rel="stylesheet" type="text/css" href="../css/PhotoNormal.css"></link>
+			<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
 		</head>
 		<body>
 			<header>
-				<nav> 
+			<nav> 
 					<h4>
 						<ul>
 							<img src="http://i.imgur.com/sAoFBWl.png"></img>
-							<li><input type="text" name="search" placeholder="Search.."></li>
-							<li class="specialButton"><input type="button" value= "Go!" onclick="doSearch()"></li>
-												<%-- User Stuff--%>
+							<form action = "../login" method ="get">
+								<input class = "noMods, goRight" type="submit" value="Log out">
+							</form>
+							<form action = "../HTML/home.html">
+								<input class = "noMods, goRight" type="submit" value="Friends">
+							</form>
+							<form action = "../JSP/UserPage.jsp">
+								<input class = "noMods, goRight" type="submit" value="My Profile">
+							</form>
+							</br>
+							</br>
+							</br>
 						</ul>
 					</h4>
 				</nav>
 			</header>
 
-			<div class = "row">
-				<h1>
-					<div class = "col"><a href="../JSP/FrontPage.jsp">Welcome</a></div>
-					<div class = "col"><a href="../JSP/BrowserPage.jsp">Browse</a></div>
-				</h1>
-			</div>
+		<div class = "row">
+			<h1>
+				<div class = "col">
+					<form  action="../welcome" method="get">
+						<input class = "noMods" type="submit" value="Welcome">
+					</form>
+				</div>
+				<div class = "col">
+					<form  action="../browse" method="get">
+						<input class = "noMods" type="submit" value="Browse">
+					</form>
+				</div>
+			</h1>
+		</div>
 	</body>
 </html>

@@ -1,31 +1,78 @@
-<meta charset="UTF-8">
-<title>Registration</title>
+<head>
+	<meta charset="UTF-8">
+	<title>Registration</title>
+	<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/register.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
 </head>
 <body>
 	<!-- insert login form here and make POST request to loginservlet -->
+<header>
+		<nav> 
+			<h4>
+				<ul>
+					<img src="http://i.imgur.com/sAoFBWl.png"></img>
+					<li class="goRight"><a href="../HTML/register.html">Join us</a></li>
+					<li class="goRight"><a href="../HTML/index.html">Log In</a></li>
+					</br>
+					</br>
+				</ul>
+			</h4>
+		</nav>
+	</header>
+<div class = "row">
+	<h1>
+		<div class = "col">
+			<form  action="../welcome" method="get">
+				<input class = "noMods" type="submit" value="Welcome">
+			</form>
+		</div>
+		<div class = "col">
+			<form  action="../browse" method="get">
+				<input class = "noMods" type="submit" value="Browse">
+			</form>
+		</div>
+	</h1>
+</div>
 
-	<h3>Please Register</h3>
+<div class = "moveToCenter">	
+<h3 class = "separate">Please Register:</h3>
+		
+		
 	<form action="register" method="post">
-		Username: <input type="text" placeholder="enter username"
-			name="username" required="required"></br> Name: <input type="text"
-			placeholder="enter name" name="name"></br> E-mail: <input
-			type="email" placeholder="enter email" name="email"
-			required="required"></br> Password: <input type="password"
-			placeholder="enter password" name="password" required="required"></br>
-		Confirm Password: <input type="password"
-			placeholder="enter password again" name="password2"
-			required="required"></br> Interests: <input type="text"
-			placeholder="interests" name="interest"></br> 
-			Gender:<select name="gender">
-			<option value="F">F</option>
-			<option value="M">M</option>
-		</select></br> Country: <select name="country">
-			<option value="1">Bulgaria</option>
-			<option value="2">Germany</option>
-			<option value="3">Austria</option>
-			<option value="4">Australia</option>
-			<option value="5"> </option>
-		</select></br> Birth Date : <select name="day">
+			<div>
+				<h4 class = "separate">Username:</h4> <input class = "move, styleImput" type="text" placeholder="enter username" name="user" required="required"> 
+			</div>
+			<div>
+				<h4 class = "separate">Password:</h4> <input class = "move, styleImput" type="password" placeholder="enter pass" name="password1" required="required">
+			</div>
+			<div>
+				<h4 class = "separate">Confirm Password:</h4> <input class = "move, styleImput" type="password" placeholder="enter pass" name="password2" required="required">
+			</div>
+			<div>
+				<h4 class = "separate">E-mail:</h4> <input class = "move, styleImput" type="email" placeholder="enter email" name="email" required="required">
+			</div>
+			<div>
+				<h4 class = "separate">Name:</h4> <input class = "move, styleImput" type="text" placeholder="enter name" name="name"> 
+			</div>
+			<div>
+				<h4 class = "separate">Interests:</h4> <input class = "move, styleImput" type="text" placeholder="interests" name="interest"> 
+			</div>
+			<div>
+				<h4 class = "separate">Gender:</h4> 
+				<select class = "move, styleImput" name="gender"> 
+					<option value="F">F</option>
+					<option value="M">M</option>
+				</select>
+			</div>
+		
+			<div>
+				<h4 class = "separate">Country:</h4> <input class = "move, styleImput" type="text" placeholder="country" name="	country"> 
+			</div>
+		<div>
+				<h4 class = "separate">Birth Date :</h4> 
+				<select name="day">
 			<option value="01">1</option>
 			<option value="02">2</option>
 			<option value="03">3</option>
@@ -75,8 +122,14 @@
 			<option value="1999">1999</option>
 			<option value="2000">2000</option>
 			<option value="2010">2010</option>
-		</select></br> <input type="submit" value="Submit" method="post" action="/register"></br>
-	</form>
+		</select>
+			</div>		
+			<div>
+				<input class = "styleSubmit" type="submit" value="Submit" method="post" action="../Login"></br>
+			</div>
+	</form>	
+</div>		
+			
 	<a href="index.html">start</a>
 </body>
 </html>

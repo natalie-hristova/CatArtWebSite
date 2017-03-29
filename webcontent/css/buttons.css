@@ -1,0 +1,39 @@
+.noMods{
+	width   : 100px;
+    background  : #b3d0cb;
+    cursor  : pointer;
+    font-family : "Monospace", Lucida Console, serif;
+   	font-size: 20px;
+    color: #549dab;
+    border : none;
+    margin : 0px;
+	padding: 0px;
+}
+
+
+button{
+	border: 0; 
+	background: transparent;
+}
+
+.noMod{
+	width   : 400px;
+    background  : #b3d0cb;
+    cursor  : pointer;
+    font-family : "Monospace", Lucida Console, serif;
+   	font-size: 20px;
+    color: #549dab;
+    border : none;
+    margin : 0px;
+	padding: 0px;
+}
+.buttonColor{
+	color: #549dab;
+	padding: o;
+	margin: 0;
+}
+
+h3{
+	padding: 0;
+	margin: 0;
+}

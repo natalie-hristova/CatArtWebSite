@@ -8,26 +8,32 @@
 	list-style-type: none;
 }
 ul li dir a img{
+	display: block;
 	max-width:175px;
 	max-height:175px;
+	width: auto;
+  	height: auto;
   	object-fit: cover;
-  	overflow:hidden;	
+  	background-size: cover;	
 }
 ul li ul li a img{
+	display: block;
 	max-width:75px;
 	max-height:75px;
- 	object-fit: cover;
-  	overflow:hidden;	
+	width: auto;
+  	height: auto;
+ 	padding: 20px 0 0 0;
 }	
 ul{
 	list-style-type: none;
 }
 ul li a img{
+	display: block;
 	max-width:255px;
 	max-height:255px;
+	width: auto;
+  	height: auto;
 	margin:0 0 0 25px;
-	object-fit: cover;
-  	overflow:hidden;
 }
 dir{
 	margin: 0;
@@ -42,16 +48,18 @@ li{
 	padding: 0;
 }
 ul li ul dir a img{
+	display: block;
 	max-width:75px;
 	max-height:75px;
+	width: auto;
+  	height: auto;
  	padding: 20px 0 0 0;
  	margin:0 0 0 25px;
-  	object-fit: cover;
-  	overflow:hidden;
+    
 }
 .moveToTheLeft{
 	margin: 0 0 0 100px;
 }
 .moveDown{
-	margin: 10.5px 0 0 0;
+	margin: 5px 0 0 0;
 }

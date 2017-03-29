@@ -28,7 +28,7 @@ nav ul li{
 	font-weight: bolder;
 	display: inline-block;
 	list-style-type: none;
-	padding: 15px 10px;
+	padding: 10px 10px;
 }
 
 nav ul li a{
@@ -49,10 +49,13 @@ h4{
 }
 .goRight{
 	float: right;
-	background: #11557a;
+	background: #0d3b59;
 	padding: 15px;
-	background: #b3d0cb;
+	border: none;
+	color: #549dae;
+	font-family: "Monospace", Lucida Console, serif;
 }
+
 .goRightLog{
 	float: right;
 	padding: 15px;
@@ -69,8 +72,7 @@ h4{
 	margin: 0;
 	padding: 10px;
 	width: 9%;
-	color: #549dab;
-	//we can use % instead of px this way is better if the screen is diffrent size	
+	color: #549dab;	
 }
 .BGforWelcome{
 	background: red;

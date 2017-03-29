@@ -8,62 +8,101 @@
 			<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
 			<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
 			<link rel="stylesheet" type="text/css" href="../css/PhotoNormal.css"></link>
+			<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
 		</head>
 		<body>
 		<header>
-				<nav> 
+			<nav> 
 					<h4>
 						<ul>
 							<img src="http://i.imgur.com/sAoFBWl.png"></img>
-							<li><input type="text" name="search" placeholder="Search.."></li>
-							<li class="specialButton"><input type="button" value= "Go!" onclick="doSearch()"></li>
-							<li class="goRight"><a href="/HTML/register.html">Join us</a></li>
-							<li class="goRight"><a href="/HTML/index.html">Log In</a></li>
+							<form action = "../login" method ="get">
+								<input class = "noMods, goRight" type="submit" value="Log out">
+							</form>
+							<form action = "../HTML/home.html">
+								<input class = "noMods, goRight" type="submit" value="Friends">
+							</form>
+							<form action = "../JSP/UserPage.jsp">
+								<input class = "noMods, goRight" type="submit" value="My Profile">
+							</form>
+							</br>
+							</br>
+							</br>
 						</ul>
 					</h4>
 				</nav>
 			</header>
 
-			<div class = "row">
-				<h1>
-					<div class = "col"><a href="../JSP/FrontPage.jsp">Welcome</a></div>
-					<div class = "col"><a href="../JSP/BrowserPage.jsp">Browse</a></div>
-				</h1>
-			</div>
+		<div class = "row">
+			<h1>
+				<div class = "col">
+					<form  action="../welcome" method="get">
+						<input class = "noMods" type="submit" value="Welcome">
+					</form>
+				</div>
+				<div class = "col">
+					<form  action="../browse" method="get">
+						<input class = "noMods" type="submit" value="Browse">
+					</form>
+				</div>
+			</h1>
+		</div>
 			<div>
 				<ul>
 					<li class = "floatLeft">
 						<h4>
 							<ul>
-							<li class="firstInLine">SORT</li>
-							<li> <a href="BrowserPage.jsp">What's Hot</a></li>
-							<li> <a href="BrowserPage.jsp">Undiscovered</a></li>
-							<li> <a href="BrowserPage.jsp">Most Stars</a></li>
-							<li> <a href="BrowserPage.jsp">Alphabetic</a></li>
-							<li> <a href="BrowserPage.jsp">Newest</a></li>
-							<li> <a class="firstInLine">SEARCH</a></li>
-							<li><input type="text" name="search" placeholder=" "></li>
-							<li class="firstInLine">CATEGORIES</li>
-							<li> <a href="BrowserPage.jsp">Photo</a></li>
-							<li> <a href="BrowserPage.jsp">Digital</a></li>
-							<li> <a href="BrowserPage.jsp">Traditional</a></li>
-							<li> <a href="BrowserPage.jsp">Crafts</a></li>
-							<li> <a href="BrowserPage.jsp">Comics</a></li>
-							<li> <a href="BrowserPage.jsp">FanArt</a></li>
-							<li class="lastInLine"> <a href="BrowserPage.jsp">Scetch</a></li>
-						</ul>
-					</h4>
-				</li>
+								<li class="firstInLine"><h3 class= "buttonColor">SORT</h3></li>
+								<li> <a href="../ImgWithMostComments"><h3 class= "buttonColor">What's Hot</h3></a></li>
+								<li> <a href="../ImgWithNoCommentsServlet"><h3 class= "buttonColor">Undiscovered</h3></a></li>
+								<li> <a href="../ImgWithMostRaiting"><h3 class= "buttonColor">Most Stars</h3></a></li>
+								<li> <a href="../ImgAlphabeticByUser"><h3 class= "buttonColor">Alphabetic</h3></a></li>
+								<li> <a href="../ImgLastUploadedServlet"><h3 class= "buttonColor">Newest</h3></a></li>
+								<li class="firstInLine"><h3 class= "buttonColor">CATEGORIES  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp</h3></li>
+								<li>
+								 	<form action="../ShowImgGenre">
+										<button type="submit" name = "genre" value="PHOTO"><h3 class= "buttonColor">Photo</h3></button>
+									</form>
+								 </li>
+								<li> 
+								 	<form action="../ShowImgGenre"> 
+										<button  type="submit" name = "genre" value="DIGITAL"><h3 class= "buttonColor">Digital</h3></button>
+									</form>							
+								</li>
+								<li> 
+									<form action="../ShowImgGenre">
+										<button  type="submit" name = "genre" value="TRADITIONAL"><h3 class= "buttonColor">Traditional</h3></button>
+									</form>	
+								</li>
+								<li> 
+									<form action="../ShowImgGenre">
+										<button  type="submit" name = "genre" value="CRAFTS"><h3 class= "buttonColor">Crafts</h3></button>
+									</form>	
+								</li>
+								<li> 
+									<form action="../ShowImgGenre">
+										<button  type="submit" name = "genre" value="COMICS"><h3 class= "buttonColor">Comics</h3></button>
+									</form>	
+								</li>
+								<li> 
+									<form action="../ShowImgGenre">
+										<button  type="submit" name = "genre" value="FANART"><h3 class= "buttonColor">FanArt</h3></button>
+									</form>
+								</li>
+								<li class="lastInLine">
+									<form action="../ShowImgGenre">
+										<button  type="submit" name = "genre" value="SCETCH"><h3 class= "buttonColor">Scetch</h3></button>
+									</form>
+								</li>
+							</ul>
+						</h4>
+					</li>
 				<li> 
-  				<%-- 
-  					HashMap<Integer, String> list = (HashMap<Integer, String>) request.getAttribute("/ShowImg");
-  					out.print(list.isEmpty());
-				--%>
 				<%
 					int k = 13;
 						for(int i =1; i< k ; i++){
 						String s = "../DB_IMG/";
-						out.print("<div  class = \"imgfloat\"><a href=\"ImgPage.jsp\"><img src=\""+ (s+i) + ".jpg\"></img></a></div>");
+						out.print("<form action=\"../ViewImg\"><form action=\"../ViewImg\"><input class = \"typePic\" type=\"image\" src=\""+ (s+i) + ".jpg\" alt=\"Submit\"></form>");;
 					} 
 				%>
 					
