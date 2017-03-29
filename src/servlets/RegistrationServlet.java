@@ -62,6 +62,8 @@ public class RegistrationServlet extends HttpServlet {
 		return (password.equals(password2));
 	}
 
+	
+	//tova trqbva da e v userDAO
 	public synchronized int addUser(HttpServletRequest req) throws SQLException {
 		// TODO insert into db
 		int errorCode = 0;

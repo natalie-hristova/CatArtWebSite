@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import DAO.DBManager;
 import DAO.UserDAO;
@@ -24,7 +25,7 @@ public class LoginServlet extends HttpServlet {
 		try {
 			if(UserDAO.getInstance().validLogin(user, pass)){
 				System.out.println("Lognahme se!");
-				fileName = "home.html";
+				fileName = "JSP/BrowserPageLoged.jsp";
 			}
 			else{
 				fileName = "loginFailed.html";
@@ -33,12 +34,12 @@ public class LoginServlet extends HttpServlet {
 			System.out.println("Error loging in - " + e.getMessage());
 			fileName = "loginFailed.html";
 		}
-		RequestDispatcher rd = req.getRequestDispatcher(fileName);
-		rd.forward(req, resp);
-		
+		HttpSession session = req.getSession();
+		System.out.println(session.getMaxInactiveInterval());
+		session.setAttribute("username", user);
+		session.setAttribute("logged", true);	
+		resp.sendRedirect(fileName);	
 	}
-	
-
 
 	@Override
 	public void destroy() {

@@ -3,12 +3,12 @@
   import java.sql.PreparedStatement;
   import java.sql.ResultSet;
   import java.sql.SQLException;
+  import java.sql.Statement;
   import java.util.HashMap;
+  import java.util.LinkedHashMap;
   import java.util.Map.Entry;
   
   import javax.xml.bind.ValidationException;
-  
-  import com.mysql.jdbc.Connection;
  
   import model.Photo;
   import model.Photo.Genre;
@@ -36,8 +36,6 @@
  		u.addPhoto(p);
  	}
  	
- 	
-  	//TODO edit photo
  	public synchronized void editPhotoName(Photo p, User u, String s) throws SQLException{
  		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);
  		try {
@@ -109,8 +107,43 @@
  			}
  		}		
  	}
+
+
+	public static Photo createPhoto(String i) throws ValidationException{
+	 		String s = "SELECT p.photo_id, p.name, p.user_id, p.genre, p.about, p.photo_link, p.raiting, p.upload_date FROM photos p " +
+	 			 "WHERE photo_id = " + i;
+	 		//initialization
+	  		Statement st = null;
+	  		Photo p = null;
+	 		try {
+	 			st = DBManager.getInstance().getConnection().createStatement();
+	 		} catch (SQLException e2) {
+	 			System.out.println("Error in getAllImgesbyGenre" + e2.getMessage());
+	 		}
+	 		ResultSet result = null;
+	 		//get result
+	 		try {
+	 			result = st.executeQuery(s);
+	 		} catch (SQLException e) {
+	 			System.out.println("ops1 " + e.getMessage());
+	 		}
+	 		try {
+	 			while(result.next()){
+	 				Long l = result.getLong("photo_id");
+	 				try {
+	 					User u = UserDAO.getUser(result.getInt("user_id"));
+	 					p = new Photo(result.getString("name"), u, Genre.valueOf(result.getString("genre")), result.getString("about"), result.getString("photo_link"));
+	 					p.setPhotoID(result.getLong("photo_id"));
+	 				} catch (SQLException e) {
+	 					System.out.println(e.getMessage());
+	 				}
+	 			}
+	 		} catch (SQLException e1) {
+	 			System.out.println("error");
+	 		}		
+	 	return p;
+	}
  	
+	
  	//TODO delete photo
- 	//TODO get one img
-  
   }

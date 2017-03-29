@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.ValidationException;
 
 import DAO.GalleryDAO;
@@ -25,10 +26,20 @@ public class ImgWithMostRaiting extends HttpServlet {
 		} catch (ValidationException | SQLException e) {
 			System.out.println("ops error in imgwithmostraiting");
 		}
-		for(Photo p : list.values()){
-			resp.getWriter().write("<img src=\""+ p.getPhotoLink() +"\">");
+	    req.setAttribute("list", list);
+	    req.setAttribute("size", list.size());
+		HttpSession ses = req.getSession();
+		if(ses.getAttribute("logged")!= null){
+			boolean logged = (Boolean) req.getSession().getAttribute("logged");
+			if(logged){
+				req.getRequestDispatcher("JSP/BrowserPageLoged.jsp").forward(req, resp);
+			}
+			else{
+				req.getRequestDispatcher("JSP/BrowserPage.jsp").forward(req, resp);
+			}
 		}
-		//    req.setAttribute("list", list);
-		//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
-	}
+		else{
+			req.getRequestDispatcher("JSP/BrowserPage.jsp").forward(req, resp);
+		}
+	} 
 }
