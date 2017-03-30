@@ -133,7 +133,7 @@ import java.util.Map.Entry;
 	 			while(result.next()){
 	 				Long l = result.getLong("photo_id");
 	 				try {
-	 					User u = UserDAO.getUser(result.getInt("user_id"));
+	 					User u = UserDAO.getInstance().getUser(result.getInt("user_id"));
 	 					p = new Photo(result.getString("name"), u, Genre.valueOf(result.getString("genre")), result.getString("about"), result.getString("photo_link"));
 	 					p.setPhotoID(result.getLong("photo_id"));
 	 				} catch (SQLException e) {
@@ -146,18 +146,18 @@ import java.util.Map.Entry;
 	 	return p;
 	}
  	
-	public static void uploadPhoto(int num, String name, Genre genre, long user_id, String about) throws SQLException{
-		String sql = "INSERT INTO photos (photo_link, name, user_id, raiting, about, genre) VALUES (?, ?, ?, ?, ?, ?)";
-		
+	public static void uploadPhoto(int num, String name, String genre, long user_id, String about) throws SQLException{
+		String sql ="INSERT INTO photos (photo_link, name, user_id, raiting, about, genre, upload_date) " + 
+		"VALUES (?, ?, ?, ?, ?, ?, current_timestamp());";
+		System.err.println("hii");
 		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);	
  		st.setString(1, "DB_IMG/" + num + ".jpg");
  		st.setString(2, name);
  		st.setLong(3, user_id);
  		st.setInt(4, 0);
- 		if(!about.isEmpty() || about != null){
- 			st.setString(5, about);
- 		}
- 		st.setString(6, genre.toString());
+ 		st.setString(5, about);
+ 		st.setString(6, genre);
+ 		st.execute();
 	}
 	
  	//TODO delete photo

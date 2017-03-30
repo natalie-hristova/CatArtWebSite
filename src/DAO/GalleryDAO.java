@@ -89,7 +89,7 @@
  				Long l = result.getLong("photo_id");
  				Photo p = null;
  				try {
- 					User u = UserDAO.getUser(result.getInt("user_id"));
+ 					User u = UserDAO.getInstance().getUser(result.getInt("user_id"));
  					p = new Photo(result.getString("name"), u, Genre.valueOf(result.getString("genre")), result.getString("about"), result.getString("photo_link"));
  					p.setPhotoID(result.getLong("photo_id"));
  				} catch (SQLException e) {
@@ -122,7 +122,7 @@
  				Long l = result.getLong("photo_id");
  				Photo p = null;
  				try {
- 					User u = UserDAO.getUser(result.getInt("user_id"));
+ 					User u = UserDAO.getInstance().getUser(result.getInt("user_id"));
  					p = new Photo(result.getString("name"), u, Genre.valueOf(result.getString("genre")), result.getString("about"), result.getString("photo_link"));
  					p.setPhotoID(result.getLong("photo_id"));
  				} catch (SQLException e) {

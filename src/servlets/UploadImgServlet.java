@@ -7,21 +7,24 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import DAO.Static;
-import model.Photo.Genre;
+import model.User;
 
 
 @WebServlet("/UploadImgServlet")
+@MultipartConfig
 public class UploadImgServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String saveFile = "";
+			String saveFile = "";
 			String contentType = request.getContentType();
 		if ((contentType != null) && (contentType.indexOf("multipart/form-data") >= 0)) {
    			DataInputStream in = new DataInputStream(request.getInputStream());
@@ -49,19 +52,33 @@ public class UploadImgServlet extends HttpServlet {
     		int endPos = ((file.substring(0, boundaryLocation)).getBytes()).length;
             saveFile = "D:/eclips/CatArt/Cat/WebContent/DB_IMG/" + (Static.fileNum) + ".jpg";
     		File ff = new File(saveFile);
-    		System.out.println(saveFile);
     		ff.createNewFile();
-    		System.out.println(ff.exists());
     		FileOutputStream fileOut = new FileOutputStream(ff);
     		fileOut.write(dataBytes, startPos, (endPos - startPos));
-    		fileOut.flush();	
+    		fileOut.flush();
+    		fileOut.close(); 
+    		String name = (String)request.getSession().getAttribute("imgName");
+    		String about = (String)request.getSession().getAttribute("imgAbout");
+    		String genre = (String)request.getSession().getAttribute("imgGenre");
+    		User u = (User)request.getSession().getAttribute("user");
+    		System.out.println(name + " " + about + " " + genre + " " +  u.getUserID());	
     		try {
-				DAO.PhotoDAO.uploadPhoto(Static.fileNum++, (String)request.getAttribute("name"), (Genre)request.getAttribute("genre"), (long)request.getSession().getAttribute("user_id"), (String)request.getAttribute("about"));
+				DAO.PhotoDAO.uploadPhoto(Static.fileNum++, name, genre, u.getUserID() , about);
 			} catch (SQLException e) {
-				System.out.println("ops cant insert to DB" + e.getMessage());
+				System.out.println("ops cant upload file");
 			}
-    		System.out.println("Uploaded in DB");
-    		fileOut.close(); 	
-		}
+    		response.sendRedirect("HTML/ImgUploadedSuccessfully.html");
+		}	
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String name = (String)request.getParameter("name");
+		String about = (String)request.getParameter("about");
+		String genre = (String)request.getParameter("genre");
+		HttpSession session = request.getSession();
+		session.setAttribute("imgName", name);
+		session.setAttribute("imgAbout", about);
+		session.setAttribute("imgGenre", genre);
+		System.out.println(name + " " + about + " " + genre);
+		request.getRequestDispatcher("JSP/UploadImgTwo.jsp").forward(request, response);
 	}
 }
