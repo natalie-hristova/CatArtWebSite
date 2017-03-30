@@ -23,12 +23,12 @@ public class BlockFriendServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		String username =(String)session.getAttribute("user");
 		String frUsername = request.getParameter("blocked");
-		System.out.println(username + " added " + request.getParameter("blocked"));
 		User user = UserDAO.getInstance().getUser(username);
 		User fr =  UserDAO.getInstance().getUser(frUsername);
 		UserDAO.getInstance().removeFromFriends(user,fr);
 		UserDAO.getInstance().blockUser(user,fr);
-		response.sendRedirect("JSP/blockedUsers.jsp");
+		System.out.println(username + " deleeted and blocked  " + request.getParameter("blocked"));
+		response.sendRedirect("JSP/friends.jsp");
 	}
 
 }

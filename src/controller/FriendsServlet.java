@@ -19,6 +19,7 @@ public class FriendsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String user = (String) session.getAttribute("user");
+		System.out.println(user + " added " + request.getParameter("friend"));
 		response.sendRedirect("../JSP/friends.jsp");
 	}
 

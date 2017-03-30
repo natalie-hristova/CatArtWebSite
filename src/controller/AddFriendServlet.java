@@ -27,6 +27,7 @@ public class AddFriendServlet extends HttpServlet {
 		User user = UserDAO.getInstance().getUser(username);
 		User fr =  UserDAO.getInstance().getUser(frUsername);
 		UserDAO.getInstance().addFriend(user,fr);
+		System.out.println(username + " added " + request.getParameter("friend"));
 		response.sendRedirect("JSP/allUsers.jsp");
 	}
 

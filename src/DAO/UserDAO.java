@@ -299,9 +299,9 @@ public class UserDAO {
 
 	public void blockUser(User user, User blocked) {
 		Connection con = DBManager.getInstance().getConnection();
-		PreparedStatement st;
+		
 		try {
-			st = con.prepareStatement("INSERT INTO blocked_users (user_id,blocked_user_id) VALUES (?,?);");
+			PreparedStatement st = con.prepareStatement("INSERT INTO blocked_users (user_id,blocked_user_id) VALUES (?,?);");
 			st.setLong(1, user.getUserID());
 			st.setLong(2, blocked.getUserID());
 			st.executeUpdate();
@@ -313,13 +313,12 @@ public class UserDAO {
 
 	public void removeFromFriends(User user, User friend) {
 		Connection con = DBManager.getInstance().getConnection();
-		PreparedStatement st;
 		try {
-			st = con.prepareStatement("DELETE FROM friends WHERE user_id = " + user.getUserID() + " AND friend_id ="
+			System.out.println("-------------" + friend.getUserID());
+			PreparedStatement st = con.prepareStatement("DELETE FROM friends WHERE user_id = " + user.getUserID() + " AND friend_id = "
 					+ friend.getUserID() + ";");
-			st.setLong(1, user.getUserID());
-			st.setLong(2, friend.getUserID());
 			st.executeUpdate();
+			System.out.println("sdfffssefxgr");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -328,12 +327,9 @@ public class UserDAO {
 
 	public void removeFromBlocked(User user, User blocked) {
 		Connection con = DBManager.getInstance().getConnection();
-		PreparedStatement st;
 		try {
-			st = con.prepareStatement("DELETE FROM blocked_users WHERE user_id = " + user.getUserID()
+			PreparedStatement st = con.prepareStatement("DELETE FROM blocked_users WHERE user_id = " + user.getUserID()
 					+ " AND blocked_user_id =" + blocked.getUserID() + ";");
-			st.setLong(1, user.getUserID());
-			st.setLong(2, blocked.getUserID());
 			st.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -349,7 +345,7 @@ public class UserDAO {
 		List<String> blocked = getInstance().getListOfBlocked(username);
 		for (int i = 0; i < allUsers.size(); i++) {
 			String currentUser = allUsers.get(i);
-			if (!(blocked.contains(currentUser) && friends.contains(currentUser))) {
+			if (!(blocked.contains(currentUser) || friends.contains(currentUser) || currentUser.equals(username))) {
 				justUsers.add(currentUser);
 			}
 		}

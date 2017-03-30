@@ -93,7 +93,7 @@ public class User implements Comparable<User> {
 	}
 
 	private boolean isValidUserName(String userName) throws ValidationException {
-		if (userName != null && userName.length() > 4) {
+		if (userName != null && userName.length() >= 4) {
 			return true;
 		} else {
 			throw new ValidationException("Not valid username");

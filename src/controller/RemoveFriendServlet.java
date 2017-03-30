@@ -21,11 +21,13 @@ public class RemoveFriendServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String username =(String)session.getAttribute("user");
-		String frUsername = request.getParameter("blocked");
-		System.out.println(username + " added " + request.getParameter("blocked"));
+		String frUsername = request.getParameter("remove");
+		System.out.println("+++++++++++++++++++++" + frUsername);
+		System.out.println(username + " removed " + request.getParameter("remove"));
 		User user = UserDAO.getInstance().getUser(username);
 		User fr =  UserDAO.getInstance().getUser(frUsername);
 		UserDAO.getInstance().removeFromFriends(user,fr);
+		System.out.println(username + " removed " + request.getParameter("remove"));
 		response.sendRedirect("JSP/friends.jsp");
 	}
 

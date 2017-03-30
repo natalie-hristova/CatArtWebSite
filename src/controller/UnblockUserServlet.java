@@ -26,6 +26,7 @@ public class UnblockUserServlet extends HttpServlet {
 		User user = UserDAO.getInstance().getUser(username);
 		User fr =  UserDAO.getInstance().getUser(frUsername);
 		UserDAO.getInstance().removeFromBlocked(user,fr);
+		System.out.println(username + "unblocked " + frUsername);
 		response.sendRedirect("JSP/blockedUsers.jsp");
 	}
 
