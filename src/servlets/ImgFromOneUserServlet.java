@@ -2,7 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,23 +14,35 @@ import javax.xml.bind.ValidationException;
 
 import DAO.GalleryDAO;
 import model.Photo;
+import model.User;
+import model.User.Gender;
+import model.User.Rights;
 
 
-@WebServlet("/ImgWithMostComments")
-public class ImgWithMostComments extends HttpServlet {
+@WebServlet("/ImgFromOneUseServlet")
+public class ImgFromOneUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    
+
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		LinkedHashMap<Long, Photo> list = new LinkedHashMap<>();
+		HashMap<Long, Photo> list = new HashMap<>();
+		User u = null;
 		try {
-			GalleryDAO.getImgMostComments(list);
-		} catch (ValidationException | SQLException e) {
-			System.out.println("ops error in imgwithmostcomments");
+			u = new User("abds", "assda", "absd@abv.bg", Gender.M, Rights.MEMBER);
+		} catch (ValidationException e1) {
+			System.out.println("whaaaat new user");
+			//TODO error here must be real user
+			
+		}
+		try {
+			GalleryDAO.getMoreImgFromThisUser(u, list);
+		} catch (SQLException e) {
+			System.out.println("error in imgfromoneuser" + e.getMessage());
+		} catch (ValidationException e) {
+			System.out.println("ops can recreat imgs");
 		}
 	    req.setAttribute("list", list);
 	    req.setAttribute("size", list.size());
-	    req.setAttribute("type", "LinkedHashMap");
+	    req.setAttribute("type", "HashMap");
 		HttpSession ses = req.getSession();
 		if(ses.getAttribute("logged")!= null){
 			boolean logged = (Boolean) req.getSession().getAttribute("logged");

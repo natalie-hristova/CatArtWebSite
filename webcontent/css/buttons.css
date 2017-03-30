@@ -1,6 +1,6 @@
 .noMods{
 	width   : 100px;
-    background  : #b3d0cb;
+    background  : #0d3b59;
     cursor  : pointer;
     font-family : "Monospace", Lucida Console, serif;
    	font-size: 20px;
@@ -18,7 +18,7 @@ button{
 
 .noMod{
 	width   : 400px;
-    background  : #b3d0cb;
+    background  : #0d3b59;
     cursor  : pointer;
     font-family : "Monospace", Lucida Console, serif;
    	font-size: 20px;
@@ -36,4 +36,25 @@ button{
 h3{
 	padding: 0;
 	margin: 0;
+}
+
+.noModBrowse{
+	width   : 200px;
+    background  : #b3d0cb;
+    cursor  : pointer;
+    font-family : "Monospace", Lucida Console, serif;
+   	font-size: 20px;
+    color: #549dab;
+    border : none;
+    margin : 0px;
+	padding: 0px;
+}
+
+.goRightBrowse{
+	float: right;
+	background: #b3d0cb;
+	padding: 5px;
+	border: none;
+	color: #0d3b59;
+	font-family: "Monospace", Lucida Console, serif;
 }

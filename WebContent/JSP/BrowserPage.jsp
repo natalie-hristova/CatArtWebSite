@@ -1,50 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import ="java.util.HashMap" import = "model.Photo;" %>
-    <%  
-    int size = (int)request.getAttribute("size"); 
-    HashMap<Long, Photo> username = (HashMap<Long, Photo>)request.getAttribute("list"); 
-    
-    %>
+    pageEncoding="ISO-8859-1"%>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
-		<head>
-			<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-			<title>Insert title here</title>
-			<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
-			<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
-			<link rel="stylesheet" type="text/css" href="../css/PhotoNormal.css"></link>
-			<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
-		</head>
-		<body>
-			<header>
-				<nav> 
-					<h4>
-						<ul>
-							<img src="http://i.imgur.com/sAoFBWl.png"></img>
-							<li class="goRight"><a href="../HTML/register.html">Join us</a></li>
-							<li class="goRight"><a href="../HTML/index.html">Log In</a></li>
-							</br>
-							</br>
-						</ul>
-					</h4>
-				</nav>
-			</header>
-
-		<div class = "row">
-			<h1>
-				<div class = "col">
-					<form  action="../welcome" method="get">
-						<input class = "noMods" type="submit" value="Welcome">
-					</form>
-				</div>
-				<div class = "col">
-					<form  action="../browse" method="get">
-						<input class = "noMods" type="submit" value="Browse">
-					</form>
-				</div>
-			</h1>
-		</div>
+	<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/PhotoNormal.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
+</head>
+	<dody>
+		<jsp:include page="Background.jsp" />
 			<div>
 				<ul>
 					<li class = "floatLeft">
@@ -59,7 +27,8 @@
 								<li class="firstInLine"><h3 class= "buttonColor">CATEGORIES  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp</h3></li>
 								<li>
 								 	<form action="../ShowImgGenre">
-										<button type="submit" name = "genre" value="PHOTO"><h3 class= "buttonColor">Photo</h3></button>
+										<button type="submit" ><h3 class= "buttonColor">Photo</h3></button>
+										<input type="hidden" name="genre" value="PHOTO" />
 									</form>
 								 </li>
 								<li> 
@@ -83,7 +52,7 @@
 									</form>	
 								</li>
 								<li> 
-									<form action="../ShowImgGenre">
+									<form action="../ShowImgGenre" >
 										<button  type="submit" name = "genre" value="FANART"><h3 class= "buttonColor">FanArt</h3></button>
 									</form>
 								</li>

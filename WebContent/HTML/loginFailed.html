@@ -17,7 +17,7 @@
 					<h4>
 						<ul>
 							<img src="http://i.imgur.com/sAoFBWl.png"></img>
-							<li class="goRight"><a href="../HTML/register.html">Join us</a></li>
+							<li class="goRight"><a href="../JSP/register.jsp">Join us</a></li>
 							<li class="goRight"><a href="../HTML/index.html">Log In</a></li>
 							</br>
 							</br>
@@ -44,21 +44,22 @@
 		<h1  style="color:red">Invalid input</h1>
 		<h3 class = "separate">Please login:</h3>
 		
-			<form action="login" method="post">
+			
+			<form action="../login" method="post">
 			<div>
 				<h4 class = "separate">Username:</h4> <input class = "move, styleImput" type="text" placeholder="enter username" name="user" required="required"> 
 			</div>
 			<div>
-				<h4 class = "separate">Password:</h4> <input class = "move, styleImput" type="password" placeholder="enter pass" name="password" required="required">
+				<h4 class = "separate">Password:</h4> <input class = "move, styleImput" type="password" placeholder="enter pass" name="pass" required="required">
 			</div>
 			<div>
-				<input class = "styleSubmit" type="submit" value="Submit" method="post" action="../Login"></br>
+				<input class = "styleSubmit" type="submit" value="Submit"></br>
 			</div>
 			</form>
 			<form action="../JSP/register.jsp">
-    			<input class = "styleSubmit" type="submit" value="Don`t have an account? Register here." ></br>
+    			<input class = "styleSubmit" type="submit" value="Don`t have an account? Register here." ></br>>
 			</form>		
-		</div>	
+		</div>
 </body>
 </html>
 </html>

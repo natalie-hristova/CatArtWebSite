@@ -1,52 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="java.util.HashMap" %>
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-	<html>
-		<head>
-			<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-			<title>Insert title here</title>
-			<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
-			<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
-			<link rel="stylesheet" type="text/css" href="../css/PhotoNormal.css"></link>
-			<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
-		</head>
-		<body>
-		<header>
-			<nav> 
-					<h4>
-						<ul>
-							<img src="http://i.imgur.com/sAoFBWl.png"></img>
-							<form action = "../login" method ="get">
-								<input class = "noMods, goRight" type="submit" value="Log out">
-							</form>
-							<form action = "../HTML/home.html">
-								<input class = "noMods, goRight" type="submit" value="Friends">
-							</form>
-							<form action = "../JSP/UserPage.jsp">
-								<input class = "noMods, goRight" type="submit" value="My Profile">
-							</form>
-							</br>
-							</br>
-							</br>
-						</ul>
-					</h4>
-				</nav>
-			</header>
-
-		<div class = "row">
-			<h1>
-				<div class = "col">
-					<form  action="../welcome" method="get">
-						<input class = "noMods" type="submit" value="Welcome">
-					</form>
-				</div>
-				<div class = "col">
-					<form  action="../browse" method="get">
-						<input class = "noMods" type="submit" value="Browse">
-					</form>
-				</div>
-			</h1>
-		</div>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="../css/Background.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/FrontPage.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/PhotoNormal.css"></link>
+	<link rel="stylesheet" type="text/css" href="../css/buttons.css"></link>
+</head>
+	<dody>
+		<jsp:include page="BackgroundLoged.jsp" />
 			<div>
 				<ul>
 					<li class = "floatLeft">
@@ -61,7 +26,8 @@
 								<li class="firstInLine"><h3 class= "buttonColor">CATEGORIES  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp  &nbsp</h3></li>
 								<li>
 								 	<form action="../ShowImgGenre">
-										<button type="submit" name = "genre" value="PHOTO"><h3 class= "buttonColor">Photo</h3></button>
+										<button type="submit" ><h3 class= "buttonColor">Photo</h3></button>
+										<input type="hidden" name="genre" value="PHOTO" />
 									</form>
 								 </li>
 								<li> 
@@ -85,7 +51,7 @@
 									</form>	
 								</li>
 								<li> 
-									<form action="../ShowImgGenre">
+									<form action="../ShowImgGenre" >
 										<button  type="submit" name = "genre" value="FANART"><h3 class= "buttonColor">FanArt</h3></button>
 									</form>
 								</li>
@@ -95,17 +61,15 @@
 									</form>
 								</li>
 							</ul>
-						</h4>
-					</li>
+					</h4>
+				</li>
 				<li> 
-				<%
-					int k = 13;
-						for(int i =1; i< k ; i++){
-						String s = "../DB_IMG/";
-						out.print("<form action=\"../ViewImg\"><form action=\"../ViewImg\"><input class = \"typePic\" type=\"image\" src=\""+ (s+i) + ".jpg\" alt=\"Submit\"></form>");;
-					} 
-				%>
-					
+  				<% for(int i =1; i< 13 ; i++){	%>	
+					<form action="../ViewImg">
+				 	 	<input class = "firstPic" type="image" src="../DB_IMG/<%=i%>.jpg" alt="Submit">
+						<input type="hidden" name = "imgNum" value="<%=i++%>">
+					</form>
+					<% 	}	%>	
 				</li>
 			</ul>
 		</div>

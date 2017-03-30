@@ -24,9 +24,10 @@ public class ImgGenreServlet extends HttpServlet {
   
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		Genre genre = (Genre) req.getAttribute("genre");
+		String s = (String) req.getParameter("genre");
+		System.out.println(s);
 		HashMap<Long, Photo> list = new HashMap<>();
-		Genre g = genre;
+		Genre g = this.rightGenre(s);
 		try {
 			GalleryDAO.getAllImgesGenre(list, g);
 		} catch (ValidationException | SQLException e) {
@@ -34,18 +35,42 @@ public class ImgGenreServlet extends HttpServlet {
 		}
 	    req.setAttribute("list", list);
 	    req.setAttribute("size", list.size());
+	    req.setAttribute("type", "HashMap");
 		HttpSession ses = req.getSession();
 		if(ses.getAttribute("logged")!= null){
 			boolean logged = (Boolean) req.getSession().getAttribute("logged");
 			if(logged){
-				req.getRequestDispatcher("JSP/BrowserPageLoged.jsp").forward(req, resp);
+				req.getRequestDispatcher("JSP/BrowserPageLogedRedirect.jsp").forward(req, resp);
 			}
 			else{
-				req.getRequestDispatcher("JSP/BrowserPage.jsp").forward(req, resp);
+				req.getRequestDispatcher("JSP/BrowserPageRedirect.jsp").forward(req, resp);
 			}
 		}
 		else{
-			req.getRequestDispatcher("JSP/BrowserPage.jsp").forward(req, resp);
+			req.getRequestDispatcher("JSP/BrowserPageRedirect.jsp").forward(req, resp);
 		}
+	}
+
+
+	private Genre rightGenre(String s) {
+		if(s.equals("PHOTO")){
+			return Genre.PHOTO;
+		}
+		if(s.equals("DIGITAL")){
+			return Genre.DIGITAL;
+		}
+		if(s.equals("TRADITIONAL")){
+			return Genre.TRADITIONAL;
+		}
+		if(s.equals("CRAFTS")){
+			return Genre.CRAFTS;
+		}
+		if(s.equals("COMICS")){
+			return Genre.COMICS;
+		}
+		if(s.equals("FANART")){
+			return Genre.FANART;
+		}
+		return Genre.SCETCH;
 	} 
 }

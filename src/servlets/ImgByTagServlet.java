@@ -30,18 +30,19 @@ public class ImgByTagServlet extends HttpServlet {
 		}
 	    req.setAttribute("list", list);
 	    req.setAttribute("size", list.size());
+	    req.setAttribute("type", "HashMap");
 		HttpSession ses = req.getSession();
 		if(ses.getAttribute("logged")!= null){
 			boolean logged = (Boolean) req.getSession().getAttribute("logged");
 			if(logged){
-				req.getRequestDispatcher("JSP/BrowserPageLoged.jsp").forward(req, resp);
+				req.getRequestDispatcher("JSP/BrowserPageLogedRedirect.jsp").forward(req, resp);
 			}
 			else{
-				req.getRequestDispatcher("JSP/BrowserPage.jsp").forward(req, resp);
+				req.getRequestDispatcher("JSP/BrowserPageRedirect.jsp").forward(req, resp);
 			}
 		}
 		else{
-			req.getRequestDispatcher("JSP/BrowserPage.jsp").forward(req, resp);
+			req.getRequestDispatcher("JSP/BrowserPageRedirect.jsp").forward(req, resp);
 		}
 	} 
 }

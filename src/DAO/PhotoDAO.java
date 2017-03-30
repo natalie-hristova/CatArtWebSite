@@ -3,10 +3,12 @@
   import java.sql.PreparedStatement;
   import java.sql.ResultSet;
   import java.sql.SQLException;
-  import java.sql.Statement;
-  import java.util.HashMap;
-  import java.util.LinkedHashMap;
-  import java.util.Map.Entry;
+import java.sql.Statement;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map.Entry;
   
   import javax.xml.bind.ValidationException;
  
@@ -144,6 +146,19 @@
 	 	return p;
 	}
  	
+	public static void uploadPhoto(int num, String name, Genre genre, long user_id, String about) throws SQLException{
+		String sql = "INSERT INTO photos (photo_link, name, user_id, raiting, about, genre) VALUES (?, ?, ?, ?, ?, ?)";
+		
+		PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql);	
+ 		st.setString(1, "DB_IMG/" + num + ".jpg");
+ 		st.setString(2, name);
+ 		st.setLong(3, user_id);
+ 		st.setInt(4, 0);
+ 		if(!about.isEmpty() || about != null){
+ 			st.setString(5, about);
+ 		}
+ 		st.setString(6, genre.toString());
+	}
 	
  	//TODO delete photo
   }

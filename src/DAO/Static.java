@@ -1,6 +1,6 @@
 package DAO;
 
-public class Static {
+public abstract class Static {
 	
 	private Static(){}
 	
