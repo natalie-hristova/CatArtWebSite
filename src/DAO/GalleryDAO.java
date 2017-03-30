@@ -119,7 +119,7 @@ public class GalleryDAO {
 				Long l = result.getLong("photo_id");
 				Photo p = null;
 				try {
-					User u = UserDAO.getUser(result.getInt("user_id"));
+					User u = UserDAO.getInstance().getUser(result.getInt("user_id"));
 					p = new Photo(result.getString("name"), u, Genre.valueOf(result.getString("genre")), result.getString("about"), result.getString("photo_link"));
 					p.setPhotoID(result.getLong("photo_id"));
 				} catch (SQLException e) {
@@ -152,7 +152,7 @@ public class GalleryDAO {
 				Long l = result.getLong("photo_id");
 				Photo p = null;
 				try {
-					User u = UserDAO.getUser(result.getInt("user_id"));
+					User u = UserDAO.getInstance().getUser(result.getInt("user_id"));
 					p = new Photo(result.getString("name"), u, Genre.valueOf(result.getString("genre")), result.getString("about"), result.getString("photo_link"));
 					p.setPhotoID(result.getLong("photo_id"));
 				} catch (SQLException e) {
@@ -179,7 +179,7 @@ public class GalleryDAO {
 	private static HashMap<Long, Photo> makeaMap(ResultSet a, HashMap<Long, Photo> map) throws ValidationException{
 			try {
 				while(a.next()){
-					User u = UserDAO.getUser(a.getInt("user_id"));
+					User u = UserDAO.getInstance().getUser(a.getInt("user_id"));
 					Photo p = new Photo(a.getString("name"), u, Genre.valueOf(a.getString("genre")), a.getString("about"), a.getString("photo_link"));
 					p.setPhotoID(a.getLong("photo_id"));
 					map.put(a.getLong("photo_id"), p);

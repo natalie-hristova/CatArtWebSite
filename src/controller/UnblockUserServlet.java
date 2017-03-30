@@ -1,4 +1,4 @@
-package servlets;
+package controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -12,22 +12,21 @@ import DAO.UserDAO;
 import model.User;
 
 /**
- * Servlet implementation class AddFriendServlet
+ * Servlet implementation class UnblockUser
  */
-@WebServlet("/addFriend")
-public class AddFriendServlet extends HttpServlet {
+@WebServlet("/unblockUser")
+public class UnblockUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
- 
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String username =(String)session.getAttribute("user");
-		String frUsername = request.getParameter("friend");
-		System.out.println(username + " added " + request.getParameter("friend"));
+		String frUsername = request.getParameter("blocked");
 		User user = UserDAO.getInstance().getUser(username);
 		User fr =  UserDAO.getInstance().getUser(frUsername);
-		user.AddFriend(fr);
-		System.out.println(user.getName() + " added " + fr.getName());
+		UserDAO.getInstance().removeFromBlocked(user,fr);
+		response.sendRedirect("JSP/blockedUsers.jsp");
 	}
 
 }

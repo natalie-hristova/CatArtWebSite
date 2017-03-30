@@ -1,4 +1,4 @@
-package servlets;
+package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -14,16 +14,18 @@ import javax.xml.bind.ValidationException;
 import DAO.GalleryDAO;
 import model.Photo;
 
-@WebServlet("/ImgWithNoCommentsServlet")
-public class ImgWithNoCommentsServlet extends HttpServlet {
+@WebServlet("/ImgsByTagServlet")
+public class ImgByTagServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HashMap<Long, Photo> list = new HashMap<>();
+		//String tag = req.getAttribute("tag");
+		String tag = "druid";
 		try {
-			GalleryDAO.getImgWithNoComments(list);
+			GalleryDAO.getImgByTag(list, tag);
 		} catch (ValidationException | SQLException e) {
-			System.out.println("ops error in imgwithno comments");
+			System.out.println("ops error in imgbytag");
 		}
 		for(Photo p : list.values()){
 			resp.getWriter().write("<img src=\""+ p.getPhotoLink() +"\">");
@@ -31,5 +33,5 @@ public class ImgWithNoCommentsServlet extends HttpServlet {
 		//    req.setAttribute("list", list);
 		//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
 	}
-}
 
+}

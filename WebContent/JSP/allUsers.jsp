@@ -9,18 +9,15 @@
 <title>Date JSP example</title>
 </head>
 <body>
-	The date is:
-	<% out.println(new java.util.Date()); %>
-	Session timeout: All users:
+	All users:
 	
 	<ol>
-	 <% for (String friend : UserDAO.getInstance().getListOfUsers()) { %>
+	 <% for (String friend : UserDAO.getInstance().getAllNotBlockedOrFriends((String)session.getAttribute("user"))) { %>
 	 <form action="../addFriend" method="post">
 	 <li><%= friend %>
 	 <input name="friend" value = <%= friend %>>
 	 <input type="submit" value="Add to friends"></li>
 	 </form>
-	 
 	 <% } %>
 	 </ol>
 	 

@@ -1,4 +1,4 @@
-package servlets;
+package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,14 +17,15 @@ import model.User;
 import model.User.Gender;
 import model.User.Rights;
 
-
-@WebServlet("/ImgFromMyFriendsServlet")
-public class ImgFromMyFriendsServlet extends HttpServlet {
+/**
+ * Servlet implementation class ImgFromOneUseServlet
+ */
+@WebServlet("/ImgFromOneUseServlet")
+public class ImgFromOneUseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HashMap<Long, Photo> list = new HashMap<>();
-		//String tag = req.getAttribute("tag");
 		User u = null;
 		try {
 			u = new User("abds", "assda", "absd@abv.bg", Gender.M, Rights.MEMBER);
@@ -32,15 +33,17 @@ public class ImgFromMyFriendsServlet extends HttpServlet {
 			System.out.println("whaaaat new user");
 		}
 		try {
-			GalleryDAO.getImgFromMyFriends(u, list);
-		} catch (ValidationException | SQLException e) {
-			System.out.println("ops error in imgbytag");
+			GalleryDAO.getMoreImgFromThisUser(u, list);
+		} catch (SQLException e) {
+			System.out.println("error in imgfromoneuser" + e.getMessage());
+		} catch (ValidationException e) {
+			System.out.println("ops can recreat imgs");
 		}
 		for(Photo p : list.values()){
 			resp.getWriter().write("<img src=\""+ p.getPhotoLink() +"\">");
 		}
-		//    req.setAttribute("list", list);
-		//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
+	//    long userID = req.getAttribute("user_id");
+	//    req.setAttribute("list", list);
+	//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
 	}
-
 }

@@ -1,8 +1,8 @@
-package servlets;
+package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,24 +14,22 @@ import javax.xml.bind.ValidationException;
 import DAO.GalleryDAO;
 import model.Photo;
 
-@WebServlet("/ImgsByTagServlet")
-public class ImgByTagServlet extends HttpServlet {
+
+@WebServlet("/ImgLastUploadedServlet")
+public class ImgLastUploadedServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HashMap<Long, Photo> list = new HashMap<>();
-		//String tag = req.getAttribute("tag");
-		String tag = "druid";
+		LinkedHashMap<Long, Photo> list = new LinkedHashMap<>();
 		try {
-			GalleryDAO.getImgByTag(list, tag);
+			GalleryDAO.getImgLastUploaded(list);
 		} catch (ValidationException | SQLException e) {
-			System.out.println("ops error in imgbytag");
+			System.out.println("ops error in imglastupload");
 		}
+		
 		for(Photo p : list.values()){
 			resp.getWriter().write("<img src=\""+ p.getPhotoLink() +"\">");
 		}
 		//    req.setAttribute("list", list);
 		//    req.getRequestDispatcher("/JSP/BrowserPage.jsp").forward(req, resp);
 	}
-
 }

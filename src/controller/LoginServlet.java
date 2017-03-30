@@ -1,4 +1,4 @@
-package servlets;
+package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,10 +25,7 @@ public class LoginServlet extends HttpServlet {
 		try {
 			if(UserDAO.getInstance().validLogin(user, pass)){
 				System.out.println("Lognahme se!");
-				//fileName = "HTML/home.html";
-				
-				
-				//if valid login
+		
 				HttpSession session = req.getSession();
 				session.setAttribute("user", user);
 				session.setAttribute("logged", true);

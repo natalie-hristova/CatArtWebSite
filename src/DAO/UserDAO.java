@@ -1,10 +1,20 @@
 package DAO;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -109,7 +119,7 @@ public class UserDAO {
 		return null;
 	}
 
-	private static User.Rights getRights(String right) {
+	private User.Rights getRights(String right) {
 
 		switch (right) {
 		case "MEMBER":
@@ -123,41 +133,40 @@ public class UserDAO {
 		}
 	}
 
-	public static User getUser(long id) throws ValidationException, SQLException {
-		User u = null;
-		String sql = "SELECT  username, password, email, gender, rights,user_id, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE user_id = "
+	public User getUser(long id) throws ValidationException, SQLException {
+		User user = null;
+		String sql = "SELECT   password, email, gender, rights,username, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE user_id = "
 				+ id + ";";
-		Statement st = DBManager.getInstance().getConnection().createStatement();
+		PreparedStatement st = null;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ResultSet res = null;
 		try {
-
 			res = st.executeQuery(sql);
-			String rights = res.getString("rights");
-			String gender = res.getString("gender");
-			User user = new User(res.getString("username"), res.getString("password"), res.getString("email"),
-					getGender(gender), getRights(rights));
-		} catch (SQLException e) {
+			if (res.next()) {
+				String rights = res.getString("rights");
+				String gender = res.getString("gender");
+				user = new User(res.getString("username"), res.getString("password"), res.getString("email"),
+						getGender(gender), getRights(rights));
+				if (res.getTimestamp("birthday") != null) {
+					user.setBirthday(res.getTimestamp("birthday").toLocalDateTime());
+				}
+				user.setJoiningDate((res.getTimestamp("joining_date")).toLocalDateTime());
+				user.setUserID(id);
+				user.setName(res.getString("name"));
+				user.setAvatar(fromBlobToFile("avatar", res));
+				user.setSigniture(res.getString("signiture"));
+			}
+
+		} catch (SQLException | ValidationException e) {
 			System.out.println("cant get user");
+			e.printStackTrace();
 		}
-		// Create user with right rights :)
-		if (res.next()) {
-			Rights r = Rights.MEMBER;
-			if (res.getString("rights") == "admin") {
-				r = Rights.ADMIN;
-			}
-			if (res.getString("rights") == "moderator") {
-				r = Rights.MODERATOR;
-			}
-			// and right gender
-			if (res.getString("gender") == "M") {
-				u = new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.M, r);
-			} else {
-				u = new User(res.getString("nickname"), res.getString("password"), res.getString("email"), Gender.F, r);
-			}
-			u.setUserID(res.getLong("user_id"));
-		}
-		// set all other stuff
-		return u;
+		return user;
 	}
 
 	private static Gender getGender(String gender) {
@@ -173,9 +182,8 @@ public class UserDAO {
 
 	public User getUser(String username) {
 		User user = null;
-		String sql = "SELECT  user_id, password, email, gender, rights,user_id, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE username = '"
+		String sql = "SELECT  user_id, password, email, gender, rights, name, birthday, signiture, avatar, joining_date,  country_id FROM users WHERE username = '"
 				+ username + "';";
-		System.out.println("=========================================================              "+sql);
 		PreparedStatement st = null;
 		try {
 			st = DBManager.getInstance().getConnection().prepareStatement(sql);
@@ -185,26 +193,166 @@ public class UserDAO {
 		}
 		ResultSet res = null;
 		try {
-
 			res = st.executeQuery(sql);
-			
-			System.out.println("++++++++++++++++++++++++++++++++++++              "+res.next());
-			String rights = res.getString("rights");
-			String gender = res.getString("gender");
-			try {
-				user = new User(res.getString("username"), res.getString("password"), res.getString("email"),
-						getGender(gender), getRights(rights));
-				user.setBirthday(res.getTimestamp("birthday").toLocalDateTime());
+			if (res.next()) {
+				String rights = res.getString("rights");
+				String gender = res.getString("gender");
+				user = new User(username, res.getString("password"), res.getString("email"), getGender(gender),
+						getRights(rights));
+				if (res.getTimestamp("birthday") != null) {
+					user.setBirthday(res.getTimestamp("birthday").toLocalDateTime());
+				}
 				user.setJoiningDate((res.getTimestamp("joining_date")).toLocalDateTime());
 				user.setUserID(res.getLong("user_id"));
 				user.setName(res.getString("name"));
-			} catch (ValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				user.setAvatar(fromBlobToFile("avatar", res));
+				user.setSigniture(res.getString("signiture"));
 			}
-		} catch (SQLException e) {
+
+		} catch (SQLException | ValidationException e) {
 			System.out.println("cant get user");
+			e.printStackTrace();
 		}
 		return user;
+	}
+
+	private File fromBlobToFile(String column, ResultSet rs) {
+		File file = new File(column);
+		Blob blob;
+		try {
+			if (rs.getBlob(column) != null) {
+				blob = rs.getBlob(column);
+				InputStream in = blob.getBinaryStream();
+				OutputStream out = new FileOutputStream(file);
+				byte[] buff = new byte[4096]; // how much of the blob to
+												// read/write at a time
+				int len = 0;
+
+				while ((len = in.read(buff)) != -1) {
+					out.write(buff, 0, len);
+				}
+			}
+		} catch (IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return file;
+	}
+
+	public void addFriend(User user, User friend) {
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("INSERT INTO friends (user_id,friend_id) VALUES (?,?);");
+			st.setLong(1, user.getUserID());
+			st.setLong(2, friend.getUserID());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public List<String> getListOfFriends(String username) {
+		List<String> friends = new ArrayList<>();
+		User u = getInstance().getUser(username);
+		long id = u.getUserID();
+		String sql = "SELECT friend_id FROM friends WHERE user_id = " + id + ";";
+		PreparedStatement st;
+		ResultSet res;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			res = st.executeQuery(sql);
+			while (res.next()) {
+				friends.add(getUser(res.getLong("friend_id")).getUsername());
+			}
+		} catch (ValidationException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return Collections.unmodifiableList(friends);
+	}
+
+	public List<String> getListOfBlocked(String username) {
+		List<String> friends = new ArrayList<>();
+		User u = getInstance().getUser(username);
+		long id = u.getUserID();
+		String sql = "SELECT blocked_user_id FROM blocked_users WHERE user_id = " + id + ";";
+		PreparedStatement st;
+		ResultSet res;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			res = st.executeQuery(sql);
+			while (res.next()) {
+				friends.add(getUser(res.getLong("blocked_user_id")).getUsername());
+			}
+		} catch (ValidationException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return Collections.unmodifiableList(friends);
+	}
+
+	public void blockUser(User user, User blocked) {
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("INSERT INTO blocked_users (user_id,blocked_user_id) VALUES (?,?);");
+			st.setLong(1, user.getUserID());
+			st.setLong(2, blocked.getUserID());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void removeFromFriends(User user, User friend) {
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("DELETE FROM friends WHERE user_id = " + user.getUserID() + " AND friend_id ="
+					+ friend.getUserID() + ";");
+			st.setLong(1, user.getUserID());
+			st.setLong(2, friend.getUserID());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void removeFromBlocked(User user, User blocked) {
+		Connection con = DBManager.getInstance().getConnection();
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("DELETE FROM blocked_users WHERE user_id = " + user.getUserID()
+					+ " AND blocked_user_id =" + blocked.getUserID() + ";");
+			st.setLong(1, user.getUserID());
+			st.setLong(2, blocked.getUserID());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	public List<String> getAllNotBlockedOrFriends(String username){
+		List<String> justUsers = new ArrayList<>();
+		List<String> allUsers = getInstance().getListOfUsers();
+		List<String> friends = getInstance().getListOfFriends(username);
+		List<String> blocked = getInstance().getListOfBlocked(username);
+		for (int i = 0; i < allUsers.size(); i++) {
+			String currentUser = allUsers.get(i);
+			if (!(blocked.contains(currentUser) && friends.contains(currentUser))) {
+				justUsers.add(currentUser);
+			}
+		}
+		return Collections.unmodifiableList(justUsers);
 	}
 }

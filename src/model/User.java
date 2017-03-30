@@ -35,7 +35,7 @@ public class User implements Comparable<User> {
 	private String email;
 	private LocalDateTime joiningDate;
 	private String name;
-	private Calendar dateOfBirth;
+	private Calendar dateOfBirth = Calendar.getInstance();
 	private Gender gender;
 
 	private String signature;
@@ -120,20 +120,20 @@ public class User implements Comparable<User> {
 		this.isLogged = false;
 	}
 
-	public void AddFriend(User p) {
+	public void addFriend(User p) {
 
 		if ( !blockedUsers.contains(p)) {
 			if (!friends.containsValue(p) && p != null) {
 				friends.put(p.getUsername(), p);
-				p.AddFriend(this);
+				p.addFriend(this);
 			}
 		}
 	}
 
-	public void RemoveFriend(User p) {
+	public void removeFriend(User p) {
 		if ( friends.containsValue(p)) {
 			friends.remove(p.getUsername(), p);
-			p.RemoveFriend(this);
+			p.removeFriend(this);
 		}
 	}
 
@@ -311,8 +311,10 @@ public class User implements Comparable<User> {
 	}
 
 	public void setBirthday(LocalDateTime bday) {
-		this.dateOfBirth.set(bday.getYear(), bday.getMonthValue(), bday.getDayOfMonth());
-				
+		if (bday!=null){
+			System.out.println(bday);
+			this.dateOfBirth.set(bday.getYear(), bday.getMonthValue(), bday.getDayOfMonth());
+		}
 	}
 
 	public void setJoiningDate(LocalDateTime joining_date) {
@@ -320,6 +322,23 @@ public class User implements Comparable<User> {
 	}
 
 	public void setName(String name) {
+		if(name!= null){
 		this.name = name;
+		}
 	}
+
+	public void setAvatar(File avatar) {
+		if (avatar!=null) {
+			this.avatar = avatar;
+		}
+		
+	}
+
+	public void setSigniture(String signature) {
+		if (signature!= null) {
+			this.signature= signature;
+		}
+	}
+	
+	
 }

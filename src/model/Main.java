@@ -34,7 +34,7 @@ public class Main {
 		System.out.println(Gallery.getProfileByUserName("gesho"));
 
 		Gallery.showProfiles();
-		Gallery.getProfileByUserName("gesho").AddFriend(Gallery.getProfileByUserName("pesho"));
+		Gallery.getProfileByUserName("gesho").addFriend(Gallery.getProfileByUserName("pesho"));
 		Gallery.showPhoto();
 
 		TreeSet<Photo> alphabetic = new TreeSet<Photo>(Gallery.alphabeticProfileComparator);
